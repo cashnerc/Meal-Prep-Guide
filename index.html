@@ -1,0 +1,1391 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weekly Kitchen Manual</title>
+<meta name="theme-color" content="#16191C">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Kitchen">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="icon" href="./icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#EDEEE9; --card:#F7F8F5; --ink:#16191C; --steel:#6E767C;
+    --rule:#C9CCC6; --rule-strong:#9BA19C;
+    --hot:#B35A00; --cold:#1B4FA0; --hot-bg:#F5E9DA; --cold-bg:#E2E9F5;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --cond:"IBM Plex Sans Condensed",system-ui,sans-serif;
+    --sans:"IBM Plex Sans",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 18px 70px}
+
+  .masthead{border-bottom:2px solid var(--ink);padding:26px 0 14px}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin-bottom:7px}
+  h1{font-family:var(--cond);font-weight:700;font-size:clamp(28px,6vw,44px);line-height:1.02;margin:0 0 9px;text-transform:uppercase;letter-spacing:-.01em}
+  .standfirst{max-width:58ch;color:#3A4045;margin:0}
+
+  .stepper{display:flex;margin:24px 0 0;border:1px solid var(--rule-strong);background:var(--card);flex-wrap:wrap}
+  .step{flex:1 1 150px;padding:12px 14px;border-right:1px solid var(--rule);cursor:pointer;background:transparent;text-align:left;font-family:inherit;color:inherit}
+  .step:last-child{border-right:none}
+  .step[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+  .step .sn{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.65;display:block;margin-bottom:3px}
+  .step .st{font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;line-height:1.1;display:block}
+  .step .sd{font-size:12.5px;opacity:.7;margin-top:2px;line-height:1.35;display:block}
+  .step:focus-visible,button:focus-visible{outline:2px solid var(--cold);outline-offset:2px}
+
+  .panel{display:none;padding-top:26px}
+  .panel.on{display:block}
+  h2.sec{font-family:var(--cond);font-weight:700;font-size:24px;text-transform:uppercase;margin:0 0 4px;letter-spacing:-.01em}
+  p.lede{color:#3A4045;max-width:64ch;margin:0 0 20px}
+
+  .grouphd{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:7px 12px;margin:26px 0 12px}
+  .filtbar{margin:0 0 12px}
+  .frow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+  .filt.reg[aria-pressed="true"]{background:var(--cold);border-color:var(--cold)}
+  .filt{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border:1px solid var(--rule-strong);background:transparent;color:var(--steel);cursor:pointer}
+  .filt[aria-pressed="true"]{background:var(--hot);border-color:var(--hot);color:#fff}
+  .tiles{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+  .tile{border:1px solid var(--rule-strong);background:var(--card);padding:12px 13px;cursor:pointer;text-align:left;font-family:inherit;color:inherit;display:block;width:100%}
+  .tile:hover{border-color:var(--steel)}
+  .tile[aria-pressed="true"]{border:2px solid var(--hot);background:#fff;padding:11px 12px}
+  .tile .tid{font-family:var(--mono);font-size:10px;color:var(--steel);letter-spacing:.1em}
+  .tile .tn{font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;line-height:1.12;margin:3px 0 4px}
+  .tile .ts{font-size:12.5px;color:#4A5257;line-height:1.4}
+  .tile .tm{font-family:var(--mono);font-size:11px;margin-top:8px;color:var(--hot);display:flex;gap:10px;flex-wrap:wrap}
+  .tile .tm .fzn{color:var(--cold)}
+
+  .chosen{border:2px solid var(--ink);background:var(--card);margin-top:26px}
+  .chosen-hd{background:var(--ink);color:var(--paper);padding:10px 14px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .chosen-body{padding:14px}
+  .pick{display:flex;gap:12px;align-items:baseline;padding:6px 0;border-bottom:1px dotted var(--rule)}
+  .pick:last-of-type{border-bottom:none}
+  .pick .pl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--steel);width:58px;flex:none}
+  .pick .pv{font-family:var(--cond);font-weight:600;font-size:17px}
+
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  button.act{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:10px 15px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;font-weight:500}
+  button.act:hover{background:var(--ink);color:var(--paper)}
+  button.act.solid{background:var(--ink);color:var(--paper)}
+  button.act.solid:hover{background:var(--hot);border-color:var(--hot)}
+
+  .catblock{margin-bottom:20px;break-inside:avoid}
+  .catname{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper);background:var(--steel);padding:4px 9px;display:inline-block;margin-bottom:9px}
+  .item{display:flex;gap:10px;align-items:baseline;padding:6px 0;border-bottom:1px dotted var(--rule);cursor:pointer}
+  .item input{margin:0;accent-color:var(--hot);width:16px;height:16px;flex:none;position:relative;top:2px}
+  .item .nm{flex:1}
+  .item .qt{font-family:var(--mono);font-size:12.5px;color:var(--hot);font-weight:500;text-align:right;white-space:nowrap}
+  .item .fr{font-family:var(--mono);font-size:9.5px;color:var(--steel);letter-spacing:.08em;text-transform:uppercase;width:50px;flex:none}
+  .item.done .nm{text-decoration:line-through;color:var(--steel)}
+
+  .tl{width:100%;border-collapse:collapse;margin:6px 0 0;background:var(--card);border:1px solid var(--rule-strong)}
+  .tl th{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;text-align:left;padding:8px 12px;background:#E4E6E0;border-bottom:1px solid var(--rule);color:var(--steel)}
+  .tl td{padding:9px 12px;border-bottom:1px solid var(--rule);font-size:14.5px;vertical-align:top}
+  .tl tr:last-child td{border-bottom:none}
+  .tl td.clk{font-family:var(--mono);font-size:13px;font-weight:600;white-space:nowrap;width:70px}
+  .tl td.who{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;width:58px;color:var(--steel)}
+  .tl tr.dnr td.who{color:var(--cold)} .tl tr.lnc td.who{color:var(--hot)}
+
+  .recipe{border:1px solid var(--rule-strong);background:var(--card);margin:20px 0;break-inside:avoid}
+  .r-hd{display:flex;gap:12px;padding:13px 15px 11px;border-bottom:1px solid var(--rule);align-items:flex-start}
+  .r-idx{font-family:var(--mono);font-size:11px;color:var(--paper);background:var(--ink);padding:3px 7px;font-weight:600;flex:none;position:relative;top:3px}
+  .r-name{font-family:var(--cond);font-weight:700;font-size:22px;line-height:1.08;text-transform:uppercase;margin:0}
+  .r-sub{color:#3A4045;font-size:14px;margin:5px 0 0;max-width:62ch}
+  .spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));border-bottom:1px solid var(--rule);background:#E4E6E0}
+  .spec div{padding:8px 12px;border-right:1px solid var(--rule)}
+  .spec div:last-child{border-right:none}
+  .spec .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--steel)}
+  .spec .v{font-family:var(--mono);font-size:14px;font-weight:600;margin-top:2px}
+  .v.hot{color:var(--hot)} .v.cold{color:var(--cold)}
+  .cols{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr)}
+  @media(max-width:760px){.cols{grid-template-columns:1fr}}
+  .col{padding:14px 15px}
+  .col+.col{border-left:1px solid var(--rule)}
+  @media(max-width:760px){.col+.col{border-left:none;border-top:1px solid var(--rule)}}
+  .col h4{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin:0 0 9px;padding-bottom:5px;border-bottom:1px solid var(--rule)}
+  .col h4+h4{margin-top:19px}
+  .ing{display:flex;justify-content:space-between;gap:12px;padding:3px 0;font-size:14px;align-items:baseline}
+  .ing .q{font-family:var(--mono);font-size:12.5px;color:var(--hot);white-space:nowrap;font-weight:500}
+  ol.steps{margin:0;padding-left:0;list-style:none;counter-reset:s}
+  ol.steps li{counter-increment:s;padding:0 0 11px 30px;position:relative;font-size:14.5px;line-height:1.5}
+  ol.steps li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:1px;font-family:var(--mono);font-size:11px;color:var(--steel);font-weight:600}
+  ol.steps li:last-child{padding-bottom:0}
+  .temp{font-family:var(--mono);font-weight:600;color:var(--hot);background:var(--hot-bg);padding:0 4px}
+  .chill{font-family:var(--mono);font-weight:600;color:var(--cold);background:var(--cold-bg);padding:0 4px}
+  table.mac{width:100%;border-collapse:collapse;font-size:13.5px}
+  table.mac td{padding:4px 0;border-bottom:1px dotted var(--rule)}
+  table.mac td+td{text-align:right;font-family:var(--mono);font-size:12.5px;width:60px}
+  table.mac tr.tot td{border-bottom:none;border-top:1px solid var(--ink);font-weight:600;padding-top:6px}
+  table.mac tr.tot td+td{color:var(--hot)}
+  .fin{display:flex;gap:9px;padding:3px 0;font-size:14px;align-items:baseline}
+  .fin .d{font-family:var(--mono);font-size:11px;color:var(--steel);width:28px;flex:none;text-transform:uppercase}
+  .note{font-size:13.5px;line-height:1.5;padding:9px 11px;margin-top:12px;border-left:3px solid var(--cold);background:var(--cold-bg);color:#1E2A3D}
+  .note.warm{border-left-color:var(--hot);background:var(--hot-bg);color:#43290C}
+  .note b{font-family:var(--cond);text-transform:uppercase}
+
+  .weekmap{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--rule-strong);margin-top:8px}
+  .weekmap th,.weekmap td{padding:8px 10px;border:1px solid var(--rule);font-size:13.5px;text-align:left}
+  .weekmap th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:#E4E6E0;color:var(--steel)}
+  .weekmap td.src{font-family:var(--mono);font-size:11px}
+  .fridge{color:var(--hot)} .freezer{color:var(--cold)}
+
+  .rules{border:2px solid var(--ink);background:var(--card);margin-top:8px}
+  .rule-item{padding:12px 15px;border-bottom:1px solid var(--rule);display:flex;gap:13px}
+  .rule-item:last-child{border-bottom:none}
+  .rule-item .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;height:fit-content;flex:none;width:58px;text-align:center;font-weight:600}
+  .tag.h{background:var(--hot-bg);color:var(--hot)} .tag.c{background:var(--cold-bg);color:var(--cold)}
+  .rule-item p{margin:0;font-size:14.5px}
+  .rule-item strong{font-family:var(--cond);text-transform:uppercase;font-size:15px}
+
+  .constants{border:1px solid var(--rule-strong);background:var(--card);margin:22px 0 0}
+  .constants h3{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin:0;padding:9px 13px;border-bottom:1px solid var(--rule);background:#E4E6E0;font-weight:600}
+  .const-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .const{padding:11px 13px;border-right:1px solid var(--rule)}
+  .const:last-child{border-right:none}
+  .const .when{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);margin-bottom:4px}
+  .const .what{font-family:var(--cond);font-weight:600;font-size:15px;line-height:1.25}
+  .const .num{font-family:var(--mono);font-size:12px;color:var(--hot);margin-top:5px}
+  .const-total{border-top:1px solid var(--rule);padding:10px 13px;font-family:var(--mono);font-size:12px;background:#E4E6E0}
+  .const-total b{color:var(--hot)}
+  .empty{padding:28px 16px;border:1px dashed var(--rule-strong);text-align:center;color:var(--steel);font-family:var(--mono);font-size:12.5px}
+  footer{margin-top:44px;border-top:1px solid var(--rule-strong);padding-top:13px;font-family:var(--mono);font-size:11px;color:var(--steel)}
+
+  @media print{
+    :root{--paper:#fff;--card:#fff}
+    body{font-size:10.5pt;background:#fff}
+    .wrap{max-width:none;padding:0}
+    .stepper,.btnrow,.no-print{display:none!important}
+    .recipe{break-inside:avoid;page-break-inside:avoid;border:1px solid #999}
+    .spec{background:#f0f0f0}
+  }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="kicker">Six servings · Monday through Saturday · Sunday flexible</div>
+    <h1>Weekly Kitchen Manual</h1>
+    <p class="standfirst">Choose one lunch and one dinner. Get the list. Cook both on Sunday in one session. Twelve of each, every recipe scaled to six servings and built to the same macro spec.</p>
+  </header>
+
+  <div class="stepper" role="tablist">
+    <button class="step" role="tab" data-p="p1" aria-selected="true"><span class="sn">Step 1</span><span class="st">Choose</span><span class="sd">Pick this week's two meals</span></button>
+    <button class="step" role="tab" data-p="p2" aria-selected="false"><span class="sn">Step 2</span><span class="st">Shop</span><span class="sd">One merged list, by aisle</span></button>
+    <button class="step" role="tab" data-p="p3" aria-selected="false"><span class="sn">Step 3</span><span class="st">Cook</span><span class="sd">Sunday timeline and recipes</span></button>
+    <button class="step" role="tab" data-p="p4" aria-selected="false"><span class="sn">Reference</span><span class="st">All 54</span><span class="sd">Browse or print all 54</span></button>
+  </div>
+
+  <section class="panel on" id="p1">
+    <h2 class="sec">Choose this week's two meals</h2>
+    <p class="lede">Each makes <b>six servings</b> — Monday through Saturday. Sunday is the flexible day: eat out, eat with people, or cook fresh. Pick one from each group, and try not to land on the same flavor family twice.</p>
+
+    <div class="grouphd">Lunch — 27 options, 6 containers each, ~600 kcal / ~53 g <span id="cntL" style="float:right;opacity:.65"></span></div>
+    <div class="filtbar" id="filtL"></div>
+    <div class="tiles" id="tilesL"></div>
+
+    <div class="grouphd">Dinner — 27 options, 6 servings each, ~690 kcal / ~56 g <span id="cntD" style="float:right;opacity:.65"></span></div>
+    <div class="filtbar" id="filtD"></div>
+    <div class="tiles" id="tilesD"></div>
+
+    <div class="chosen">
+      <div class="chosen-hd"><span id="weekLabel">This week</span><span id="famNote"></span></div>
+      <div class="chosen-body">
+        <div class="pick"><span class="pl">Lunch</span><span class="pv" id="pickL">— not chosen —</span></div>
+        <div class="pick"><span class="pl">Dinner</span><span class="pv" id="pickD">— not chosen —</span></div>
+        <div class="btnrow">
+          <button class="act solid" id="toShop">Build shopping list →</button>
+          <button class="act" id="toCook">Go to Sunday plan →</button>
+          <button class="act" id="copyLink">Copy week link</button>
+          <button class="act" id="resetAll">Reset saved data</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="constants">
+      <h3>Fixed daily — never chosen, never changes</h3>
+      <div class="const-grid">
+        <div class="const"><div class="when">Morning</div><div class="what">Coffee + 1 Nurri + 3 egg bites</div><div class="num">396 kcal · 56 g</div></div>
+        <div class="const"><div class="when">Midday</div><div class="what">Lunch container + sauce cup</div><div class="num">~580 · ~51 g</div></div>
+        <div class="const"><div class="when">15:30</div><div class="what">1 Nurri + 1 apple</div><div class="num">245 · 31 g</div></div>
+        <div class="const"><div class="when">Evening</div><div class="what">Dinner + ½ cup starch + vegetable</div><div class="num">~695 · ~54 g</div></div>
+        <div class="const"><div class="when">Optional</div><div class="what">Greek yogurt, only if hungry</div><div class="num">150 · 23 g</div></div>
+        <div class="const"><div class="when">Golf bag</div><div class="what">4 beef sticks · apple · electrolytes</div><div class="num">455 · 41 g</div></div>
+      </div>
+      <div class="const-total">DAY TOTAL <b>≈ 2,065 kcal · 215 g protein</b> · TARGET 2,100 / 180 g floor · Step to 2,300 after three consistent lifting weeks</div>
+    </div>
+  </section>
+
+  <section class="panel" id="p2">
+    <h2 class="sec">Shopping list</h2>
+    <div id="shopOut"></div>
+  </section>
+
+  <section class="panel" id="p3">
+    <h2 class="sec">Sunday</h2>
+    <div id="cookOut"></div>
+  </section>
+
+  <section class="panel" id="p4">
+    <h2 class="sec">All recipes</h2>
+    <p class="lede">Twenty-seven lunches, twenty-seven dinners, every one scaled to six servings.</p>
+    <div class="grouphd">Standing rules — apply to every recipe</div>
+    <div class="rules" id="rulesBox"></div>
+    <div class="grouphd">Lunch</div><div id="allL"></div>
+    <div class="grouphd">Dinner</div><div id="allD"></div>
+  </section>
+
+  <footer>Six servings, Mon–Sat · Sunday flexible · Whole-muscle poultry 157°F · Ground poultry 165°F · Pork tenderloin 145°F · Sauce separate, always</footer>
+</div>
+
+<script>
+const RULES=[
+["h","Pull whole-muscle poultry at 157°F.","Carryover takes it to 165 while resting. Pulling at 165 is why batch chicken tastes like batch chicken. <b>Ground poultry is different — 165°F, no exceptions.</b> Pork tenderloin comes off at 145°F."],
+["h","Two-zone fire, always.","All coals on one side, or half the burners off. Sear direct, finish indirect. Without it, 3 lb of thighs at once means flare-ups and char."],
+["h","Cast-iron griddle plate on the grates.","This is the ground-meat answer — mess stays outside, better crust than a stove, no flare-ups, nothing falls through. Best $30–40 in the system."],
+["h","Marinate before grilling.","Substantially reduces heterocyclic amine formation, and produces better food regardless. Flip often, trim heavy fat, don't eat the black parts."],
+["c","Starch cools on a sheet pan, into the fridge inside one hour.","Spread thin. <i>Bacillus cereus</i> spores survive cooking and germinate in rice held warm — slow-cooled rice is the standard vector."],
+["c","Slice protein after it cools, against the grain.","Slicing hot bleeds juice onto the board. Slicing cool keeps it in the meat, which is what you need on Saturday."],
+["c","Sauce and raw components travel separately.","2 oz deli cups, added at the desk after heating — never portioned into the container on Sunday. This one rule decides whether you're still doing this in week six."],
+["c","Three to the fridge, three to the freezer — Sunday, while fresh.","USDA guidance on cooked poultry and ground meat is 3–4 days refrigerated. Six containers cooked Sunday would make Saturday's day seven. <b>Freezing half is mandatory, not optional.</b> Move the frozen three down Wednesday night."],
+["c","To build a buffer, scale the pot dish to eight.","Add roughly 30% more protein and one extra can of beans or tomatoes. Eat six, bank two. Three weeks of that and a destroyed Sunday stops mattering."],
+["h","Reheat: 90 seconds, lid ajar, a tablespoon of water on the starch.","Then cold components, then sauce. In that order. <b>Check the Reheat field on every recipe first</b> — a third of the manual is not microwavable."],
+["c","Every fish and steak lunch is cold service. No exceptions.","Reheated fish goes chalky and reheated steak is ruined — those aren't preferences, they're properties. All six fish lunches and all three beef lunches are cooked once and eaten cold or at room temperature. Take the container out when you sit down and eat it fifteen minutes later."],
+["c","Fish dinners: 60% power, stir once, stop while it's just warm.","The three fish dinners are built as a sauce base with the fish poached in at the very end. That's what lets them survive the week — but they will not tolerate a microwave on high. For the freezer, hold back a third of the base <i>before</i> the fish goes in, freeze that, and poach fresh fish into it on the night."],
+["c","Tortillas never go in the container. Ever.","A tortilla sitting against wet filling for six days is paste. Carry them in their own bag and heat them at eating time — 20 seconds in a damp paper towel in the office microwave, or 30 seconds a side on a dry skillet at home. <b>Tostada shells are the desk-friendly version</b>: packed dry, already crisp, nothing to heat."],
+["h","Street-size corn tortillas, not flour.","Four 4.5-inch corn tortillas run about 120 kcal and 6 g of fiber. Two 8-inch flour tortillas run close to 300 with almost no fiber. This is the highest-leverage swap in any taco recipe here."],
+["h","Twelve dishes in this manual work as tacos.","Filter by <b>Tacos</b> on the choose screen. Six were already here before any taco recipe was written — tinga, barbacoa, salsa verde, ropa vieja, al pastor and chile-lime chicken are all taco fillings that happened to be plated over rice. Buy a bag of tortillas and any of them converts."],
+["h","No steak dinner in this manual is a steak.","Short rib, chuck and flank are tough cuts braised for hours until the collagen breaks down and a sauce protects them. A ribeye or strip cannot survive batch cooking in any form. If you want one, that's Sunday's fresh meal."],
+["c","Every grilled lunch has an oven version: 425°F, 25 minutes.","November and December will produce nights you're not standing outside. Don't let weather break the system."]
+];
+
+const FIXED=[
+{cat:"COSTCO",nm:"Nurri 30g protein shake, 15-pack",qt:"2 packs"},
+{cat:"MEAT",nm:"Beef or turkey sticks — golf bag",qt:"12-pack"},
+{cat:"DAIRY",nm:"Nonfat Greek yogurt, plain",qt:"2 × 32 oz"},
+{cat:"DAIRY",nm:"Eggs, large — egg bites",qt:"1 dozen"},
+{cat:"DAIRY",nm:"Liquid egg whites — egg bites",qt:"2 × 16 oz"},
+{cat:"DAIRY",nm:"Feta, block in brine",qt:"4 oz"},
+{cat:"PRODUCE",nm:"Apples",qt:"9"},
+{cat:"PRODUCE",nm:"Bell peppers — egg bites",qt:"2"},
+{cat:"PRODUCE",nm:"Baby spinach — egg bites",qt:"5 oz bag"},
+{cat:"PANTRY",nm:"Electrolyte packets",qt:"1 box"},
+{cat:"PANTRY",nm:"Olive oil — check level",qt:"~1 cup/wk"}
+];
+
+const L=[
+{n:"Chicken Shawarma",s:"Turmeric basmati, grilled cauliflower and red onion, cucumber-tomato-parsley, garlic-lemon yogurt.",fam:"Middle Eastern",k:581,p:52,fz:"Partial",
+sat:"Marinate 3 lb thighs: 4 tbsp olive oil, 4 tbsp lemon juice, 6 cloves minced garlic, 4 tsp cumin, 2½ tsp coriander, 2½ tsp smoked paprika, 1¼ tsp turmeric, ¾ tsp cinnamon, ¼ tsp cayenne, 2½ tsp kosher salt. Zip bag, 6–12 hours.",
+tl:{grill:"Thighs on — direct 4 min per side for char, then slide to indirect.",pull:"Pull thighs at <span class='temp'>157°F</span>. Rest 10 min.",veg:"Cauliflower and red onion in the grill basket over indirect, 20–25 min, shaking twice.",starch:"Turmeric basmati on the stove — 1 cup dry, 12 min covered, 10 min off heat."},
+shop:[["MEAT","Boneless skinless chicken thighs","3 lb"],["PRODUCE","Cauliflower","2 heads"],["PRODUCE","Red onion","3"],["PRODUCE","English cucumber","4"],["PRODUCE","Cherry tomatoes","1 pint"],["PRODUCE","Flat-leaf parsley","1 bunch"],["PRODUCE","Lemons","6"],["PRODUCE","Garlic","1 head"],["PANTRY","Basmati rice","1 cup dry"],["PANTRY","Cumin, coriander, smoked paprika, turmeric, cinnamon, cayenne","—"]],
+steps:["<b>Saturday night.</b> Marinate the thighs 6–12 hours. The 2½ tsp salt is a 1% brine — it holds water in the muscle and is what protects you on day five.",
+"Two-zone fire. Thighs direct 4 min per side, then indirect 3–5 min.",
+"Pull at <span class='temp'>157°F</span>. Rest 10 min, then <span class='chill'>cool fully</span> before slicing ½ inch against the grain.",
+"Cauliflower florets and red onion wedges, 2 tbsp oil, 1½ tsp cumin, salt. Grill basket over indirect 20–25 min. Undercook slightly — it gets reheated five more times.",
+"Rice: rinse 1 cup basmati until clear. 1:1½ water, 1 tsp turmeric, ¾ tsp salt. Boil, cover, lowest heat 12 min, off-heat 10 min. <span class='chill'>Spread thin on a sheet pan</span>, fridge inside an hour.",
+"Cold salad, its own container: 4 cucumbers diced, tomatoes halved, parsley, juice of 1 lemon, ½ tsp salt.",
+"Sauce cups: 1½ cups Greek yogurt, 2 cloves grated garlic, juice of 1 lemon, 3 tbsp water, ¾ tsp salt."],
+mac:[["5.5 oz grilled thigh",326,41],["½ cup turmeric basmati",105,2],["Cauliflower + red onion",70,3],["Cucumber-tomato-parsley",30,1],["Garlic-lemon yogurt cup",50,5]],
+fin:["Garlic-lemon yogurt","Yogurt + extra lemon, parsley","Harissa or chili crisp","Yogurt + cumin, crumbled feta","Pickled red onion","Yogurt + za'atar"],
+note:["Roasted cauliflower freezes badly — watery on thaw. Leave the vegetable slot empty in the three frozen containers and add frozen green beans at reheat.","warm|Raw garlic sharpens across the week. Two cloves Sunday tastes like four by Saturday. Start low."]},
+
+{n:"Gochujang Chicken",s:"Jasmine rice, grilled broccoli, kimchi, scallion and sesame.",fam:"Korean",k:575,p:51,fz:"Yes",
+sat:"Marinate 3 lb thighs: 4 tbsp gochujang, 2½ tbsp soy, 1 tbsp rice vinegar, 1 tbsp sesame oil, 5 cloves garlic, 1 tbsp grated ginger, 1 tsp salt. 6–12 hours.",
+tl:{grill:"Thighs on — direct 3 min per side only (gochujang scorches), then indirect to finish.",pull:"Pull thighs at <span class='temp'>157°F</span>. Rest 10 min.",veg:"Broccoli florets in the grill basket over indirect, 15–18 min.",starch:"Jasmine rice on the stove — 1 cup dry."},
+shop:[["MEAT","Boneless skinless chicken thighs","3 lb"],["PRODUCE","Broccoli","3 heads"],["PRODUCE","Scallions","1 bunch"],["PRODUCE","Garlic","1 head"],["PRODUCE","Ginger","2 in"],["PRODUCE","English cucumber","3"],["DAIRY","Kimchi","16 oz jar"],["PANTRY","Gochujang","1 tub"],["PANTRY","Jasmine rice","1 cup dry"],["PANTRY","Soy sauce, rice vinegar, toasted sesame oil, sesame seeds","—"]],
+steps:["<b>Saturday night.</b> Marinate 6–12 hours. No extra salt — the soy handles it.",
+"Gochujang has sugar and will scorch. Sear direct <b>3 min per side only</b>, then finish entirely over indirect.",
+"Pull at <span class='temp'>157°F</span>. Rest, <span class='chill'>cool</span>, slice against the grain.",
+"Broccoli florets, oil and salt, grill basket over indirect 15–18 min. Charred edges are the goal.",
+"Jasmine rice, 1 cup dry. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Quick cucumber pickle, separate: 3 cucumbers sliced thin, ¼ cup rice vinegar, 1 tsp sugar, ½ tsp salt. Twenty minutes.",
+"Sauce cups: 1 tbsp gochujang + 1 tsp vinegar + 1 tsp sesame oil each. Kimchi into its own cups — never microwaved."],
+mac:[["5.5 oz grilled thigh",326,41],["½ cup jasmine rice",105,2],["Grilled broccoli",65,4],["Kimchi + cucumber pickle",25,1],["Gochujang sauce cup",55,1]],
+fin:["Gochujang + sesame","Extra kimchi, scallion","Chili crisp","Soy-vinegar-sesame","Ssamjang","Fried egg, if you have 3 min"],
+note:["Freezes cleanly — rice and thigh both hold. Kimchi and cucumber stay refrigerated, never frozen.","warm|Sugar in the marinade means indirect heat does the work. Rushing over direct flame gives you black outside, raw inside."]},
+
+{n:"Chile-Lime Chicken",s:"Cilantro-lime rice with black beans, grilled peppers and onions, slaw, chipotle yogurt.",fam:"Mexican",k:607,p:55,fz:"Yes",
+sat:"Marinate 3 lb thighs: juice of 4 limes, 4 tbsp oil, 2½ tbsp chili powder, 4 tsp cumin, 2½ tsp smoked paprika, 1¼ tsp oregano, 5 cloves garlic, 2½ tsp salt. 6–12 hours.",
+tl:{grill:"Peppers and onions in slabs on direct until blistered; thighs alongside, 4 min per side, then indirect.",pull:"Pull thighs at <span class='temp'>157°F</span>. Rest 10 min. Chop the peppers.",veg:"Peppers and onions chopped after grilling.",starch:"Jasmine rice — 1 cup dry, folded with lime, cilantro and 1 drained can of black beans."},
+shop:[["MEAT","Boneless skinless chicken thighs","3 lb"],["PRODUCE","Bell peppers","4"],["PRODUCE","Yellow onion","2"],["PRODUCE","Limes","7"],["PRODUCE","Cilantro","2 bunches"],["PRODUCE","Coleslaw mix","1 bag"],["PANTRY","Black beans","2 cans"],["PANTRY","Chipotles in adobo","1 can"],["PANTRY","Jasmine rice","1 cup dry"],["PANTRY","Chili powder, cumin, smoked paprika, oregano","—"]],
+steps:["<b>Saturday night.</b> Marinate 6–12 hours.",
+"Peppers and onions in thick slabs straight on the grates, direct heat, until blistered. Chop after.",
+"Thighs direct 4 min per side, indirect to finish. Pull at <span class='temp'>157°F</span>.",
+"Rice: 1 cup jasmine cooked, then folded with juice of 2 limes, chopped cilantro, and 1 drained can of black beans. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Slaw stays raw and separate: coleslaw mix, lime, salt, cilantro. <b>Dress the morning of, not Sunday.</b>",
+"Sauce cups: 1½ cups Greek yogurt, 3 minced chipotles + 1 tbsp adobo, lime juice, salt."],
+mac:[["5.5 oz grilled thigh",326,41],["½ cup cilantro-lime rice + beans",148,7],["Grilled peppers + onions",60,2],["Slaw",25,1],["Chipotle yogurt cup",48,4]],
+fin:["Chipotle yogurt","Lime + cilantro, plain","Hot sauce, straight","Yogurt + extra adobo","Pickled red onion + cotija","Salsa verde"],
+note:["Beans in the rice add 5 g protein and 6 g fiber for 43 kcal. Best trade in the manual.","warm|Slaw dressed on Sunday is soup by Wednesday. Dress it the morning of — ten seconds."]},
+
+{n:"Cold Salmon Mediterranean",s:"Farro and chickpeas, cucumber, tomato, red onion, feta, arugula, lemon-oregano vinaigrette. Eaten cold — no microwave all week.",fam:"Mediterranean",k:653,p:47,fz:"No",
+sat:"Nothing Saturday. Salmon takes oil, salt, pepper and lemon zest 20 minutes before it goes on.",
+tl:{grill:"Salmon skin-side down over direct, lid closed, do not flip. 8–10 min.",pull:"Pull salmon at <span class='temp'>125–130°F</span>. <span class='chill'>Chill completely</span> before portioning.",veg:"No roasted vegetable — the chopped salad is raw and separate.",starch:"Farro, 1¼ cups dry, 25–30 min, folded with chickpeas while warm."},
+shop:[["MEAT","Salmon fillets, skin on","2.75 lb"],["PRODUCE","English cucumber","4"],["PRODUCE","Cherry tomatoes","1½ pints"],["PRODUCE","Red onion","2"],["PRODUCE","Arugula","5 oz"],["PRODUCE","Lemons","6"],["PRODUCE","Fresh dill or oregano","1 bunch"],["DAIRY","Feta, block in brine","8 oz"],["PANTRY","Farro","1¼ cups dry"],["PANTRY","Chickpeas","2 cans"],["PANTRY","Dried oregano, red wine vinegar","—"]],
+steps:["No overnight marinade. Oil, salt, pepper, lemon zest 20 minutes before grilling.",
+"Grill skin-side down over direct heat, lid closed, <b>do not flip</b>, 8–10 min until it flakes. The skin sticks to the grate and lifts away — fine, it isn't going in the container.",
+"Pull at <span class='temp'>125–130°F</span> for medium. Salmon is the one protein here you can genuinely ruin by overcooking.",
+"<span class='chill'>Chill completely before portioning.</span> Cold on purpose — reheated fish is the worst thing in meal prep.",
+"Farro: 1¼ cups dry, salted water, 25–30 min, drained. Fold with 1 drained can of chickpeas while warm so it absorbs.",
+"Chopped salad, its own container: cucumber, tomatoes, red onion, dill. Arugula in a separate bag — it wilts on contact with dressing.",
+"Vinaigrette cups: ⅓ cup olive oil, juice of 3 lemons, 3 tbsp red wine vinegar, 1 tbsp dried oregano, garlic, salt."],
+mac:[["5.5 oz grilled salmon, cold",321,34],["½ cup farro + chickpeas",167,9],["Chopped salad + arugula",35,2],["Feta, ½ oz",40,2],["Lemon-oregano vinaigrette cup",90,0]],
+fin:["Vinaigrette + feta","Extra lemon, cracked pepper","Tzatziki instead","Kalamata + oregano","Harissa thinned with lemon","Olive oil and flaky salt only"],
+note:["<b>Do not freeze.</b> Thawed salmon is unpleasant. Six-day fridge build — and it works precisely because nothing here is ever reheated.","warm|Salmon is the lowest-protein option at 34 g. The chickpeas and feta carry it to 47. Don't drop them."]},
+
+{n:"Pork Tenderloin Pesto",s:"Farro, grilled zucchini, sun-dried tomato, pesto-yogurt.",fam:"Italian",k:560,p:50,fz:"Yes",
+sat:"Remove the silverskin, then rub 2.75 lb tenderloin: 2½ tbsp oil, 4 tsp crushed fennel seed, 1¼ tsp red pepper flake, 5 cloves garlic, 2½ tsp salt.",
+tl:{grill:"Tenderloins on direct, turning every 3 min for an even crust, 12–15 min total.",pull:"Pull tenderloin at <span class='temp'>145°F</span> — not 157. Rest 10 min.",veg:"Zucchini planks direct, 3 min per side. Chop after.",starch:"Farro, 1¼ cups dry, 25–30 min, folded with sun-dried tomato."},
+shop:[["MEAT","Pork tenderloin","2.75 lb"],["PRODUCE","Zucchini","5"],["PRODUCE","Cherry tomatoes","1 pint"],["PRODUCE","Lemons","3"],["PRODUCE","Basil","1 bunch"],["PRODUCE","Arugula","5 oz"],["PANTRY","Farro","1¼ cups dry"],["PANTRY","Sun-dried tomatoes in oil","1 jar"],["PANTRY","Prepared pesto","1 jar"],["PANTRY","Fennel seed, red pepper flake","—"]],
+steps:["<b>Saturday night.</b> Remove the silverskin — the tough membrane on top will not render. Slide a knife under and pull. Then rub and refrigerate.",
+"Direct heat, turn every 3 minutes to build an even crust, 12–15 min total. Move to indirect if it colors too fast.",
+"Pull at <span class='temp'>145°F</span> — tenderloin is lean and 157 is sawdust. <b>This is the exception to the poultry rule.</b> Rest 10 min, <span class='chill'>cool</span>, slice ½ inch.",
+"Zucchini in ½-inch planks, oil and salt, direct heat 3 min per side. Chop after.",
+"Farro 25–30 min. Fold with chopped sun-dried tomato while warm. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Sauce cups: 4 tbsp pesto thinned with ¾ cup Greek yogurt and lemon juice — halves the pesto calories and adds protein."],
+mac:[["5.5 oz grilled tenderloin",223,41],["½ cup farro + sun-dried tomato",130,5],["Grilled zucchini",55,2],["Arugula + cherry tomatoes",30,1],["Pesto-yogurt cup",122,3]],
+fin:["Pesto-yogurt","Lemon + parmesan","Balsamic + cracked pepper","Chili crisp","Extra sun-dried tomato + basil","Olive oil and flaky salt"],
+note:["Leanest protein in the manual — 223 kcal for 41 g. That headroom is exactly why this build can afford a real pesto cup.","warm|145°F, not 157. Getting this backwards ruins the leanest cut in the book."]},
+
+{n:"Teriyaki Chicken",s:"Jasmine rice, grilled green beans, sesame, scallion.",fam:"Japanese",k:578,p:51,fz:"Yes",
+sat:"Marinate 3 lb thighs: ⅓ cup soy, 4 tbsp mirin, 1 tbsp sesame oil, 1 tbsp grated ginger, 5 cloves garlic. Reserve ½ cup marinade BEFORE it touches raw chicken.",
+tl:{grill:"Thighs on — direct 3 min per side (mirin scorches), then indirect.",pull:"Pull thighs at <span class='temp'>157°F</span>. Rest 10 min.",veg:"Green beans in the grill basket over direct, 8–10 min until blistered.",starch:"Jasmine rice on the stove — 1 cup dry."},
+shop:[["MEAT","Boneless skinless chicken thighs","3 lb"],["PRODUCE","Green beans","2 lb"],["PRODUCE","Scallions","1 bunch"],["PRODUCE","Ginger","2 in"],["PRODUCE","Garlic","1 head"],["PRODUCE","English cucumber","3"],["PANTRY","Soy sauce","—"],["PANTRY","Mirin","1 bottle"],["PANTRY","Jasmine rice","1 cup dry"],["PANTRY","Toasted sesame oil, sesame seeds, rice vinegar","—"]],
+steps:["<b>Saturday night.</b> Marinate 6–12 hours. No added salt — soy is doing it.",
+"<b>Reserve ½ cup of marinade before it touches raw chicken.</b> Simmer it down 5 minutes into a glaze for the sauce cups.",
+"Sear direct 3 min per side — mirin scorches — then indirect. Pull at <span class='temp'>157°F</span>.",
+"Rest, <span class='chill'>cool</span>, slice against the grain.",
+"Green beans, oil and salt, grill basket over direct 8–10 min until blistered and squeaky.",
+"Jasmine rice, 1 cup dry. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Cucumber sunomono, separate: 3 cucumbers sliced paper-thin, ¼ cup rice vinegar, 1 tsp sugar, pinch salt, sesame seeds."],
+mac:[["5.5 oz grilled thigh",326,41],["½ cup jasmine rice",105,2],["Grilled green beans",60,3],["Cucumber sunomono",25,1],["Teriyaki glaze cup",62,4]],
+fin:["Teriyaki glaze + sesame","Ponzu","Chili crisp + scallion","Sriracha-mayo, thin","Furikake and nori","Rice vinegar + scallion"],
+note:["Never reuse marinade that touched raw chicken without boiling it. Reserve the glaze first — a ten-second habit.","warm|Blistered green beans hold texture through six reheats better than broccoli. Use this build when the vegetable needs to survive."]},
+
+{n:"Greek Kofta Skewers",s:"Ground chicken on flat skewers, lemon rice, grilled peppers, cucumber-dill tzatziki.",fam:"Greek",k:570,p:50,fz:"Yes",
+sat:"Mix and chill: 3 lb ground chicken, 1 grated onion squeezed dry, 1 egg, ⅔ cup chopped parsley, 4 tsp cumin, 2½ tsp coriander, 2½ tsp oregano, ¾ tsp cinnamon, 5 cloves garlic, 2½ tsp salt.",
+tl:{grill:"Kofta packed onto flat skewers in 5-inch logs, direct heat 3–4 min per side.",pull:"Pull kofta at <span class='temp'>165°F</span> — ground poultry, not 157.",veg:"Peppers in slabs on direct until blistered. Chop after.",starch:"Lemon rice — 1 cup dry, finished with lemon and parsley."},
+shop:[["MEAT","Ground chicken or turkey, 93/7","3 lb"],["PRODUCE","Yellow onion","2"],["PRODUCE","Bell peppers","4"],["PRODUCE","English cucumber","4"],["PRODUCE","Lemons","6"],["PRODUCE","Fresh dill","1 bunch"],["PRODUCE","Flat-leaf parsley","1 bunch"],["PRODUCE","Garlic","1 head"],["DAIRY","Feta","4 oz"],["PANTRY","Jasmine or basmati rice","1 cup dry"],["PANTRY","Cumin, coriander, dried oregano, cinnamon","—"],["EQUIPMENT","Flat metal skewers","8–10"]],
+steps:["<b>This is the ground-meat solution.</b> Kofta is what most of the world does with ground meat over fire — high surface area, fast, self-portioning.",
+"Mix everything. <b>Grated onion squeezed dry</b> — wet onion means it falls off the skewer.",
+"<span class='chill'>Chill the mix 30 minutes</span> before forming. Cold mix packs; warm mix slides.",
+"Pack onto <b>flat</b> metal skewers in 5-inch logs. Round skewers spin and the meat tears.",
+"Direct heat, 3–4 min per side, turning once. Pull at <span class='temp'>165°F</span> — <b>ground poultry, so the 157 rule does not apply.</b>",
+"Peppers in slabs, direct until blistered. Lemon rice: 1 cup dry, finished with juice of 2 lemons and parsley. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Tzatziki cups: 1½ cups Greek yogurt, 1 cucumber grated and squeezed <b>hard</b>, 3 cloves garlic, dill, lemon, salt."],
+mac:[["5.5 oz kofta",274,42],["½ cup lemon rice",108,2],["Grilled peppers + onion",60,2],["Cucumber-tomato side",30,1],["Tzatziki cup + feta",98,6]],
+fin:["Tzatziki","Lemon + oregano, dry","Harissa-yogurt","Feta + red onion","Chili crisp","Tzatziki + extra dill"],
+note:["warm|165°F for ground poultry, no exceptions. Ground meat has surface bacteria distributed throughout — the whole-muscle rule does not transfer.","Squeeze the grated onion and the grated cucumber genuinely dry. Both are the difference between kofta that holds and kofta that crumbles."]},
+
+{n:"Jerk Chicken",s:"Rice and kidney beans, grilled pineapple, cabbage slaw.",fam:"Caribbean",k:595,p:52,fz:"Yes",
+sat:"Blend the jerk paste and marinate 3 lb thighs: 1 bunch scallions, 3 in ginger, 7 cloves garlic, 1–2 habaneros, 2½ tbsp allspice, 1 tbsp thyme, 1¼ tsp cinnamon, ½ tsp nutmeg, 2½ tbsp soy, 2½ tbsp brown sugar, juice of 2 limes, 2½ tsp salt. 8–12 hours. Wear gloves.",
+tl:{grill:"Thighs on — direct 3 min per side (sugar in the marinade), then indirect for the rest.",pull:"Pull thighs at <span class='temp'>157°F</span>. Rest 10 min.",veg:"Pineapple rings direct, 2 min per side until caramelized. Chop.",starch:"Rice and peas — 1 cup jasmine in coconut milk and water with kidney beans, scallion and thyme."},
+shop:[["MEAT","Boneless skinless chicken thighs","3 lb"],["PRODUCE","Scallions","2 bunches"],["PRODUCE","Ginger","3 in"],["PRODUCE","Thyme","1 bunch"],["PRODUCE","Limes","5"],["PRODUCE","Pineapple","1 whole"],["PRODUCE","Coleslaw mix","1 bag"],["PRODUCE","Habanero or scotch bonnet","2"],["PANTRY","Kidney beans","2 cans"],["PANTRY","Light coconut milk","1 can"],["PANTRY","Jasmine rice","1 cup dry"],["PANTRY","Allspice, cinnamon, nutmeg, brown sugar, soy sauce","—"]],
+steps:["<b>Saturday night.</b> Blend the jerk paste and marinate 8–12 hours. <b>Wear gloves</b> handling habanero — capsaicin transfers and survives several handwashings.",
+"Sugar in the marinade: sear direct 3 min per side, then <b>indirect for the rest</b>. Pull at <span class='temp'>157°F</span>.",
+"Rest, <span class='chill'>cool</span>, slice against the grain.",
+"Rice and peas: 1 cup jasmine cooked in ½ can light coconut milk plus water, with 1 drained can kidney beans, 2 scallions, 1 sprig thyme. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Pineapple in thick rings, direct heat 2 min per side until caramelized. Chop.",
+"Slaw separate: coleslaw mix, lime, salt. Dress the morning of.",
+"Sauce cups: reserved unused jerk paste thinned with lime, or Greek yogurt plus a spoon of jerk."],
+mac:[["5.5 oz grilled thigh",326,41],["½ cup rice and peas",158,7],["Grilled pineapple",45,1],["Cabbage slaw",25,1],["Jerk-yogurt cup",41,2]],
+fin:["Jerk-yogurt","Lime, straight","Extra jerk paste","Pineapple salsa","Hot sauce + scallion","Yogurt + lime zest"],
+note:["Coconut milk in the rice is worth 40 kcal — it's what makes rice and peas taste like rice and peas rather than beans in rice.","warm|Habanero heat builds across the week as the paste sits. Start with one."]},
+
+{n:"Flank Steak Chimichurri",s:"Grilled potatoes, peppers and onions, arugula, chimichurri. Eaten at room temperature.",fam:"Argentine",k:585,p:50,fz:"No",
+sat:"Rub 2.75 lb flank: 2½ tbsp oil, 4 tsp smoked paprika, 4 tsp cumin, 7 cloves garlic, 2½ tsp salt, 1¼ tsp pepper.",
+tl:{grill:"Flank on direct heat only, hot fire, 4–5 min per side.",pull:"Pull flank at <span class='temp'>130–135°F</span> for medium-rare. Rest 10 min, then <span class='chill'>cool completely</span>.",veg:"Potatoes parboiled 8 min, then grill basket over direct 12–15 min. Peppers and onions in slabs.",starch:"Potatoes are the starch — no grain needed."},
+shop:[["MEAT","Flank steak","2.75 lb"],["PRODUCE","Yukon gold potatoes","2.5 lb"],["PRODUCE","Bell peppers","4"],["PRODUCE","Red onion","2"],["PRODUCE","Flat-leaf parsley","2 bunches"],["PRODUCE","Cilantro","1 bunch"],["PRODUCE","Arugula","5 oz"],["PRODUCE","Garlic","1 head"],["PRODUCE","Lemons","2"],["PANTRY","Red wine vinegar","—"],["PANTRY","Dried oregano, red pepper flake, smoked paprika","—"]],
+steps:["<b>Saturday night.</b> Rub and refrigerate.",
+"Flank is thin. <b>Direct heat only</b>, hot fire, 4–5 min per side. Pull at <span class='temp'>130–135°F</span>.",
+"Rest 10 min. <span class='chill'>Cool completely.</span> Slice <b>very thin, hard against the grain</b> — flank has an aggressive grain and slicing with it produces something you can't chew.",
+"Potatoes halved, parboiled 8 min, then grill basket over direct until crusted, 12–15 min.",
+"Peppers and onions in slabs, direct until blistered. Chop.",
+"Chimichurri cups: 2 bunches parsley, 1 bunch cilantro, 7 cloves garlic, ⅔ cup olive oil, ½ cup red wine vinegar, 1 tbsp oregano, 1 tsp red pepper flake, salt. <b>Chopped, not blended</b> — blending makes green paste.",
+"Arugula in a separate bag. Steak goes on top of it at the desk, at room temperature."],
+mac:[["5.5 oz flank, sliced thin",309,44],["Grilled potatoes",130,3],["Peppers + onions",55,2],["Arugula",10,1],["Chimichurri cup",81,0]],
+fin:["Chimichurri","Chimichurri + lemon","Horseradish-yogurt","Salsa verde","Flaky salt and olive oil","Dijon vinaigrette"],
+note:["<b>Never microwave this.</b> Take it out of the fridge when you sit down and eat it at room temperature 15 minutes later. Steak reheated is steak ruined.","warm|Slicing direction matters more on flank than any cut here. Find the grain, cut perpendicular to it."]},
+
+{n:"Harissa Chicken & Chickpeas",s:"Pearl couscous, roasted carrot, chickpeas, harissa-yogurt.",fam:"North African",k:623,p:57,fz:"Yes",
+sat:"Marinate 3 lb thighs: 4 tbsp harissa, 4 tbsp oil, juice of 2 lemons, 4 tsp cumin, 2½ tsp coriander, 1¼ tsp caraway, 5 cloves garlic, 2½ tsp salt. 6–12 hours.",
+tl:{grill:"Thighs on — direct 4 min per side, then indirect.",pull:"Pull thighs at <span class='temp'>157°F</span>. Rest 10 min.",veg:"Carrot coins and red onion in the grill basket over indirect, 20–25 min. Carrots take longer than they look.",starch:"Pearl couscous — toast dry, cook in stock 10 min, fold in chickpeas while warm."},
+shop:[["MEAT","Boneless skinless chicken thighs","3 lb"],["PRODUCE","Carrots","2.5 lb"],["PRODUCE","Red onion","3"],["PRODUCE","Lemons","5"],["PRODUCE","Cilantro","1 bunch"],["PRODUCE","Flat-leaf parsley","1 bunch"],["PANTRY","Harissa paste","1 jar"],["PANTRY","Chickpeas","2 cans"],["PANTRY","Pearl couscous","1¼ cups dry"],["PANTRY","Cumin, coriander, caraway, cinnamon","—"]],
+steps:["<b>Saturday night.</b> Marinate 6–12 hours.",
+"Direct 4 min per side, indirect to finish. Pull at <span class='temp'>157°F</span>. Rest, <span class='chill'>cool</span>, slice.",
+"Carrots in thick diagonal coins with red onion wedges, oil, cumin, salt. Grill basket over indirect 20–25 min.",
+"Pearl couscous: toast 1¼ cups dry in a dry pan until nutty, then cook in stock 10 min. Fold in 1 drained can chickpeas while warm. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Herb salad, separate: parsley and cilantro roughly chopped, lemon, salt.",
+"Sauce cups: 1½ cups Greek yogurt, 1½ tbsp harissa, lemon, salt."],
+mac:[["5.5 oz grilled thigh",326,41],["½ cup couscous + chickpeas",162,8],["Roasted carrot + onion",65,2],["Herb salad",20,1],["Harissa-yogurt cup",50,5]],
+fin:["Harissa-yogurt","Plain yogurt + lemon","Straight harissa","Preserved lemon + olive","Zhoug or chili crisp","Yogurt + toasted almond"],
+note:["Pearl couscous holds texture through reheats; fine couscous turns to paste. Buy the large kind.","warm|Harissa brands vary enormously in heat. Taste yours before committing four tablespoons to 3 lb of chicken."]},
+
+{n:"Miso-Ginger Salmon",s:"Jasmine rice, edamame, cucumber. Eaten cold — no microwave all week.",fam:"Japanese",k:600,p:48,fz:"No",
+sat:"Nothing Saturday. The miso marinade goes on 30 minutes before grilling only — miso is salty enough to cure the surface overnight.",
+tl:{grill:"Salmon skin-side down over direct, lid closed, do not flip. 8–10 min. Wipe most of the marinade off first — miso burns.",pull:"Pull salmon at <span class='temp'>125–130°F</span>. <span class='chill'>Chill completely</span> before portioning.",veg:"Edamame from frozen, boiled 4 min, cooled.",starch:"Jasmine rice, 1 cup dry, seasoned warm with rice vinegar and salt."},
+shop:[["MEAT","Salmon fillets, skin on","2.75 lb"],["PRODUCE","English cucumber","4"],["PRODUCE","Scallions","1 bunch"],["PRODUCE","Ginger","3 in"],["PRODUCE","Limes","3"],["FROZEN","Shelled edamame","1.5 lb bag"],["PANTRY","White miso paste","1 tub"],["PANTRY","Mirin","—"],["PANTRY","Jasmine rice","1 cup dry"],["PANTRY","Rice vinegar, sesame oil, sesame seeds, furikake","—"]],
+steps:["Marinate <b>30 minutes only</b>: 4 tbsp white miso, 2½ tbsp mirin, 1 tbsp rice vinegar, 1 tbsp grated ginger, 1 tsp sesame oil.",
+"Wipe most of the marinade off before grilling. Miso burns fast.",
+"Skin-side down over direct heat, lid closed, <b>do not flip</b>, 8–10 min. Pull at <span class='temp'>125–130°F</span>.",
+"<span class='chill'>Chill completely.</span> Cold dish by design.",
+"Jasmine rice, 1 cup dry, seasoned while warm with 2 tbsp rice vinegar and ½ tsp salt. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Edamame from frozen, boiled 4 min, cooled. Goes in the container.",
+"Cucumber sunomono separate. Sauce cups: 1 tbsp miso, 1 tsp mirin, 1 tsp vinegar, grated ginger, thinned with water."],
+mac:[["5.5 oz grilled salmon, cold",321,34],["½ cup seasoned rice",108,2],["Edamame, ½ cup",95,9],["Cucumber sunomono",25,1],["Miso-ginger cup",51,2]],
+fin:["Miso-ginger","Ponzu + scallion","Furikake and nori","Sriracha-mayo, thin","Chili crisp + lime","Rice vinegar + sesame"],
+note:["Edamame does real work — 9 g protein and 5 g fiber for 95 kcal. It's why a salmon build clears 48 g.","warm|<b>Do not freeze.</b> Six-day fridge only, and it works because nothing here is reheated."]},
+
+{n:"Al Pastor Pork",s:"Grilled pineapple and onion, cilantro-lime rice, salsa roja, cotija.",fam:"Mexican",k:600,p:52,fz:"Yes",
+sat:"Toast 5 dried guajillos, soak 20 min, blend with 2 chipotles, ¼ cup pineapple, 5 cloves garlic, 2½ tbsp cider vinegar, 4 tsp cumin, 1¼ tsp oregano, 2½ tsp salt. Slice 2.75 lb tenderloin into ¾-inch medallions and marinate 6–12 hours.",
+tl:{grill:"Medallions on direct heat, 2–3 min per side. They cook fast.",pull:"Pull pork at <span class='temp'>145°F</span>. Rest, <span class='chill'>cool</span>, chop into bite-size.",veg:"Pineapple rings and thick onion slabs on direct until caramelized, 2–3 min per side.",starch:"Jasmine rice, 1 cup dry, folded with lime and cilantro."},
+shop:[["MEAT","Pork tenderloin","2.75 lb"],["PRODUCE","Pineapple","1 whole"],["PRODUCE","White onion","3"],["PRODUCE","Limes","6"],["PRODUCE","Cilantro","2 bunches"],["PRODUCE","Roma tomatoes","7"],["PRODUCE","Serrano or jalapeño","2"],["PANTRY","Guajillo or ancho chiles, dried","5"],["PANTRY","Chipotles in adobo","1 can"],["PANTRY","Jasmine rice","1½ cups dry"],["DAIRY","Cotija cheese","4 oz"],["PANTRY","Cumin, oregano, cider vinegar","—"]],
+steps:["<b>Saturday night.</b> Toast the dried guajillos in a dry pan 30 sec per side, soak in hot water 20 min, blend into a paste with the rest.",
+"<b>Slice the tenderloins into ¾-inch medallions before marinating</b> — more surface area, more char, and it's how al pastor actually works.",
+"Direct heat, 2–3 min per side. Medallions cook fast. Pull at <span class='temp'>145°F</span>.",
+"Pineapple rings and thick onion slabs on the grill until caramelized, 2–3 min per side. Chop both.",
+"Rice: 1 cup jasmine, folded with lime and cilantro. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Salsa roja cups: char 7 romas, 2 serranos and ½ onion on the grill, blend with garlic, cilantro, lime, salt.",
+"<span class='chill'>Cool</span> the pork before chopping into bite-size pieces."],
+mac:[["5.5 oz al pastor tenderloin",235,41],["¾ cup cilantro-lime rice",158,3],["Grilled pineapple + onion",95,2],["Cilantro + onion garnish",15,1],["Salsa roja cup",42,2],["Cotija, ½ oz",55,3]],
+fin:["Salsa roja","Lime + raw onion + cilantro","Salsa verde","Chipotle-yogurt","Hot sauce, straight","Extra grilled pineapple"],
+note:["Tenderloin instead of the traditional shoulder — 235 kcal against 400+ for the same protein, and it still takes the marinade.","warm|The dried chiles are the whole dish. Chili powder is not a substitute and the difference is not subtle."]},
+
+{n:"Grilled Tuna Niçoise",s:"Rare tuna, potatoes, green beans, egg, olives, dijon vinaigrette. Served cold — the classic is a cold dish.",fam:"French",k:589,p:58,fz:"No",
+sat:"Nothing Saturday. Tuna takes oil, salt, cracked pepper and lemon zest 20 minutes before it goes on. Boil 6 eggs and leave them in the shell.",
+tl:{grill:"Tuna steaks on a screaming-hot direct zone — 90 seconds per side, no more.",pull:"Pull tuna at <span class='temp'>115°F</span> for rare in the middle. <span class='chill'>Chill completely</span> before slicing.",veg:"Green beans blanched 4 min then shocked in ice water. Potatoes boiled 15 min, halved.",starch:"Potatoes are the starch — no grain needed."},
+shop:[["MEAT","Yellowfin or ahi tuna steaks, 1 in thick","2.75 lb"],["PRODUCE","Baby potatoes","2 lb"],["PRODUCE","Green beans","1.5 lb"],["PRODUCE","Cherry tomatoes","1 pint"],["PRODUCE","Red onion","1"],["PRODUCE","Lemons","4"],["PRODUCE","Flat-leaf parsley","1 bunch"],["DAIRY","Eggs, large","6 (plus egg-bite dozen)"],["PANTRY","Niçoise or kalamata olives","1 cup"],["PANTRY","Dijon mustard, red wine vinegar, capers","—"]],
+steps:["<b>Tuna is the one protein here you must undercook.</b> Cooked-through tuna is dry, gray and expensive. Aim for a red center.",
+"Screaming-hot direct zone, <b>90 seconds per side</b>. Pull at <span class='temp'>115°F</span> — it will carry a few degrees. If your steaks are under an inch, cut to 60 seconds.",
+"<span class='chill'>Chill completely, then slice ½ inch against the grain.</span> Warm tuna crumbles; cold tuna slices clean.",
+"Potatoes: boil 15 min until a knife slides in, halve, toss warm with vinaigrette so they absorb it.",
+"Green beans: blanch 4 minutes, then straight into ice water. The shock is what keeps them green and snappy all week.",
+"Eggs: 10 minutes in boiling water, ice bath, <b>leave them in the shell</b> and peel the morning you eat them. Peeled eggs go rubbery by day three.",
+"Vinaigrette cups: ⅓ cup olive oil, 3 tbsp red wine vinegar, 2 tbsp dijon, 1 tbsp capers, garlic, salt. Olives and tomatoes into their own cups."],
+mac:[["5.5 oz grilled tuna, cold",217,47],["Potatoes with vinaigrette",100,2],["Green beans",60,2],["1 hard-boiled egg",72,6],["Olives + tomatoes",50,1],["Dijon vinaigrette cup",90,0]],
+fin:["Dijon vinaigrette","Extra lemon + capers","Anchovy-garlic vinaigrette","Aioli, thin layer","Chopped egg + parsley","Olive oil and flaky salt"],
+note:["<b>Highest protein of any lunch here at 58 g</b>, and tuna runs 4.6 kcal per gram of protein — better than chicken breast. It is also the most expensive protein in the manual by a wide margin.","warm|<b>Do not freeze, never microwave.</b> Cold from the fridge, eaten as-is. Reheating rare tuna gives you a gray, chalky mess."]},
+
+{n:"Blackened Tuna Bowl",s:"Cajun-crusted tuna, dirty rice, charred corn and black beans, slaw, rémoulade. Cold.",fam:"Cajun",k:565,p:61,fz:"No",
+sat:"Nothing Saturday. The blackening rub goes on dry, right before grilling — 2 tbsp smoked paprika, 1 tbsp each cumin, garlic powder, onion powder, 2 tsp thyme, 2 tsp oregano, 1–2 tsp cayenne, 2 tsp salt.",
+tl:{grill:"Tuna steaks pressed hard into the dry rub, then onto a screaming-hot direct zone — 90 seconds per side.",pull:"Pull tuna at <span class='temp'>115°F</span> for a red center. <span class='chill'>Chill completely</span> before slicing.",veg:"Corn on the cob and peppers on direct until charred. Cut the kernels off after.",starch:"Dirty rice — 1 cup dry cooked with the trinity, peppers and celery folded in."},
+shop:[["MEAT","Yellowfin or ahi tuna steaks, 1 in thick","2.75 lb"],["PRODUCE","Corn on the cob","4 ears"],["PRODUCE","Bell peppers","3"],["PRODUCE","Celery","1 bunch"],["PRODUCE","Yellow onion","2"],["PRODUCE","Scallions","1 bunch"],["PRODUCE","Coleslaw mix","1 bag"],["PRODUCE","Lemons","4"],["PANTRY","Black beans","2 cans"],["PANTRY","Long-grain rice","1 cup dry"],["PANTRY","Smoked paprika, cayenne, thyme, oregano, garlic powder, onion powder","—"],["PANTRY","Dijon, capers, hot sauce","—"]],
+steps:["Mix the blackening rub. <b>Press it on dry and hard</b> — this is a crust, not a marinade, and wet tuna won't take it.",
+"Screaming-hot direct zone, <b>90 seconds per side</b>. Pull at <span class='temp'>115°F</span>. The crust should be genuinely black in places; that's the dish.",
+"<span class='chill'>Chill completely, then slice ½ inch against the grain.</span>",
+"Corn and peppers straight on the grates until charred, 8 min. Cut the kernels off the cob after.",
+"Dirty rice: 1 cup long-grain cooked, then folded with diced celery, peppers, onion and 1 drained can of black beans. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Slaw stays raw and separate. Dress the morning of.",
+"Rémoulade cups: 1½ cups Greek yogurt, 2 tbsp dijon, 1 tbsp capers, 1 tsp hot sauce, scallion, lemon, salt."],
+mac:[["5.5 oz blackened tuna, cold",217,47],["¾ cup dirty rice",158,4],["Charred corn + black beans",110,5],["Slaw",25,1],["Rémoulade cup",55,4]],
+fin:["Rémoulade","Lemon + hot sauce","Extra blackening rub, dry","Pickled okra","Scallion + cayenne","Chili crisp"],
+note:["Cayenne varies wildly by jar. Start at 1 tsp across the whole rub — you can add heat at the table, you can't take it out of 2.75 lb of tuna.","warm|<b>Do not freeze, never microwave.</b> Cold service only, same as the Niçoise."]},
+
+{n:"Turkish Grilled Bass",s:"Bulgur, chickpeas, ezme salad, sumac-yogurt. Cold.",fam:"Turkish",k:571,p:55,fz:"No",
+sat:"Nothing Saturday. Bass takes oil, salt, lemon and a little sumac 20 minutes before it goes on.",
+tl:{grill:"Bass fillets skin-side down in a fish basket over direct, lid closed. 6–8 min, do not flip.",pull:"Pull bass at <span class='temp'>130–135°F</span>. <span class='chill'>Chill completely</span> before portioning.",veg:"Ezme salad is raw and separate — no roasted vegetable.",starch:"Bulgur — 1¼ cups dry, soaked in hot stock 20 min, fluffed. Chickpeas folded in."},
+shop:[["MEAT","Striped bass or black sea bass fillets, skin on","2.75 lb"],["PRODUCE","Roma tomatoes","6"],["PRODUCE","Bell peppers","3"],["PRODUCE","Red onion","2"],["PRODUCE","English cucumber","3"],["PRODUCE","Flat-leaf parsley","2 bunches"],["PRODUCE","Lemons","6"],["PRODUCE","Garlic","1 head"],["PANTRY","Coarse bulgur","1¼ cups dry"],["PANTRY","Chickpeas","2 cans"],["PANTRY","Sumac, Aleppo pepper, pomegranate molasses","—"],["PANTRY","Walnuts","½ cup"]],
+steps:["<b>Buy striped bass or black sea bass.</b> Chilean sea bass is a different fish entirely — Patagonian toothfish — at roughly double the calories per ounce. It will blow the macros.",
+"<b>Use a fish basket.</b> Bass is delicate and will tear on bare grates. Skin-side down over direct, lid closed, 6–8 min, <b>do not flip.</b>",
+"Pull at <span class='temp'>130–135°F</span>. <span class='chill'>Chill completely before portioning.</span>",
+"Bulgur: 1¼ cups coarse bulgur soaked in 2 cups hot stock, covered, 20 min. Fluff with a fork, fold in 1 drained can chickpeas and lemon.",
+"Ezme salad, its own container: tomatoes, peppers, red onion, cucumber and parsley all chopped fine, with 1 tbsp pomegranate molasses, Aleppo pepper, olive oil, lemon.",
+"Toast the walnuts and add them to the ezme — they go soft if they sit in it, so keep them in the sauce cups instead if you want the crunch.",
+"Sauce cups: 1½ cups Greek yogurt, 2 cloves grated garlic, 2 tsp sumac, lemon, salt."],
+mac:[["5.5 oz grilled bass, cold",193,37],["¾ cup bulgur",114,4],["Chickpeas, ½ cup",134,7],["Ezme salad + walnuts",80,2],["Sumac-yogurt cup",50,5]],
+fin:["Sumac-yogurt","Lemon + Aleppo pepper","Pomegranate molasses drizzle","Yogurt + dill","Toasted walnut + parsley","Olive oil and sumac"],
+note:["Bulgur is the most underused grain in this manual — 20 minutes of soaking, no boiling, and it holds texture better than couscous or rice across six days.","warm|<b>Do not freeze, never microwave.</b> The bass is the most delicate protein here and it only works cold."]},
+
+{n:"Tuna & White Bean Salad",s:"No grill, no oven, no cooking at all. Fifteen minutes, holds all six days.",fam:"Tuscan",k:570,p:55,fz:"No",
+sat:"Nothing. This is the recipe you pick when Sunday is gone.",
+tl:{grill:"<b>No grill.</b> Nothing is cooked in this recipe — skip straight to assembly.",pull:"Nothing to pull. Drain the tuna and the beans.",veg:"Celery, red onion, tomatoes and parsley chopped. Arugula bagged separately.",starch:"The beans are the starch. Nothing to cook."},
+shop:[["MEAT","Canned tuna in water, 5 oz","8 cans"],["PRODUCE","Celery","1 bunch"],["PRODUCE","Red onion","2"],["PRODUCE","Cherry tomatoes","1½ pints"],["PRODUCE","Flat-leaf parsley","2 bunches"],["PRODUCE","Arugula","5 oz"],["PRODUCE","Lemons","6"],["PRODUCE","Garlic","1 head"],["PANTRY","Cannellini beans","4 cans"],["PANTRY","Red wine vinegar, capers, red pepper flake","—"],["PANTRY","Good olive oil","—"]],
+steps:["<b>This is the insurance policy.</b> No grill, no oven, no stove — pick it when you're travelling, when Sunday got destroyed, or when it's January and you're not standing outside.",
+"Drain 8 cans of tuna and 4 cans of cannellini. Rinse the beans until the water runs clear or they'll taste tinny.",
+"Chop celery, red onion and parsley fine. Halve the tomatoes.",
+"Combine tuna, beans, celery, onion, parsley, 2 tbsp capers, ½ tsp red pepper flake, juice of 3 lemons, ¼ cup olive oil, salt. <b>Fold, don't stir</b> — you want flaked tuna, not paste.",
+"Portion six. Tomatoes and arugula stay in their own containers.",
+"Dressing cups: ¼ cup olive oil, juice of 2 lemons, 1 grated garlic clove, salt. Add at the desk.",
+"<b>Total time: about 15 minutes.</b> It genuinely improves by day three as the beans absorb the lemon."],
+mac:[["5.5 oz canned tuna, drained",181,41],["¾ cup cannellini",165,10],["Celery, onion, parsley, tomato",40,2],["Arugula",10,1],["Lemon-oil dressing cup",120,0],["Parmesan, ½ oz",54,5]],
+fin:["Lemon-oil dressing","Extra capers + red pepper flake","Dijon vinaigrette","Parmesan + cracked pepper","Chili crisp","Balsamic, a few drops"],
+note:["Water-packed tuna at 4.4 kcal per gram of protein is the second-best ratio in the manual. Oil-packed tastes considerably better and costs about 100 kcal per serving — a defensible trade if you have the room.","warm|Keep this one in your back pocket permanently. A week with no cook time is still a week on plan."]},
+
+{n:"Santa Maria Tri-Tip",s:"Red oak-style tri-tip, pinquito beans, grilled peppers, salsa fresca. Room temperature.",fam:"Californian",k:589,p:52,fz:"No",
+sat:"Rub 2.75 lb tri-tip: 2 tbsp kosher salt, 1 tbsp coarse black pepper, 1 tbsp garlic powder, 2 tsp onion powder, 1 tsp cayenne. That's the whole Santa Maria seasoning — resist adding more.",
+tl:{grill:"Tri-tip fat-cap up over indirect until 15° short, then hard sear over direct, 3 min per side.",pull:"Pull tri-tip at <span class='temp'>130–135°F</span>. Rest 15 min — longer than anything else here.",veg:"Peppers and onions in slabs on direct until blistered. Chop after.",starch:"Pinquito or pinto beans, simmered with garlic and a little bacon fat or oil."},
+shop:[["MEAT","Tri-tip roast, trimmed","2.75 lb"],["PRODUCE","Bell peppers","4"],["PRODUCE","Red onion","2"],["PRODUCE","Roma tomatoes","6"],["PRODUCE","Jalapeños","2"],["PRODUCE","Cilantro","2 bunches"],["PRODUCE","Limes","5"],["PRODUCE","Garlic","1 head"],["PRODUCE","Romaine or green leaf","1 head"],["PANTRY","Pinquito or pinto beans","3 cans"],["PANTRY","Garlic powder, onion powder, cayenne, coarse black pepper","—"]],
+steps:["<b>Reverse sear.</b> Fat-cap up over indirect heat until the center hits <span class='temp'>115°F</span>, then move to direct and sear hard, 3 min per side.",
+"Pull at <span class='temp'>130–135°F</span> for medium-rare. <b>Rest 15 minutes</b> — tri-tip is thick and needs longer than anything else in this manual.",
+"<span class='chill'>Cool completely before slicing.</span> Tri-tip has <b>two grains running in different directions.</b> Find where they meet, cut the roast in half there, then slice each half against its own grain. Get this wrong and it's chewy.",
+"Beans: 3 cans pinquito or pinto, drained, simmered 20 min with garlic, a little onion and 1 tsp cumin.",
+"Peppers and onions in slabs, direct until blistered. Chop.",
+"Salsa fresca, its own container: tomatoes, jalapeño, onion, cilantro, lime, salt.",
+"Romaine in a separate bag. The steak goes on top at the desk, at room temperature."],
+mac:[["5.5 oz tri-tip, sliced thin",329,41],["½ cup pinquito beans",120,7],["Grilled peppers + onions",55,2],["Salsa fresca",25,1],["Romaine + lime",60,1]],
+fin:["Salsa fresca","Chimichurri","Horseradish-yogurt","Lime + cotija","Flaky salt and olive oil","Hot sauce + cilantro"],
+note:["The two-grain problem is real and it's the only hard part of this recipe. Cut the roast in half where the grains meet before slicing anything.","warm|<b>Never microwave.</b> Out of the fridge when you sit down, eaten at room temperature 15 minutes later."]},
+
+{n:"Thai Grilled Beef Salad",s:"Nam tok — charred sirloin, toasted rice powder, mint and cilantro, lime and fish sauce. Cold.",fam:"Thai",k:589,p:54,fz:"No",
+sat:"Marinate 2.75 lb top sirloin: 3 tbsp fish sauce, 2 tbsp soy, 1 tbsp sugar, 5 cloves garlic, 1 tbsp white pepper. 4–8 hours only — fish sauce cures fast.",
+tl:{grill:"Sirloin on a hot direct zone, 4 min per side. You want genuine char.",pull:"Pull sirloin at <span class='temp'>130–135°F</span>. Rest 10 min, then <span class='chill'>cool completely</span>.",veg:"No roasted vegetable — the herb salad is raw and separate.",starch:"Jasmine rice, 1 cup dry. Toast 3 tbsp raw rice in a dry pan for the rice powder."},
+shop:[["MEAT","Top sirloin, 1 in thick","2.75 lb"],["PRODUCE","Mint","2 bunches"],["PRODUCE","Cilantro","2 bunches"],["PRODUCE","Scallions","1 bunch"],["PRODUCE","Shallots","4"],["PRODUCE","English cucumber","3"],["PRODUCE","Cherry tomatoes","1 pint"],["PRODUCE","Limes","8"],["PRODUCE","Thai chiles","4"],["PANTRY","Fish sauce","1 bottle"],["PANTRY","Jasmine rice","1 cup dry + 3 tbsp"],["PANTRY","Toasted chili flake, palm or brown sugar","—"]],
+steps:["<b>Saturday.</b> Marinate 4–8 hours only. Fish sauce cures the surface fast and overnight turns it hammy.",
+"Hot direct zone, 4 min per side. <b>Char is the point</b> — nam tok means 'waterfall', for the juices hitting the coals.",
+"Pull at <span class='temp'>130–135°F</span>. Rest 10 min, <span class='chill'>cool completely</span>, slice <b>very thin against the grain.</b>",
+"<b>Toasted rice powder.</b> Toast 3 tbsp raw jasmine rice in a dry pan over medium until deep golden, 6–8 min, then grind in a spice grinder or mortar. This is the signature of the dish and there is no substitute for it.",
+"Jasmine rice, 1 cup dry. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Herb salad, its own container: mint, cilantro, scallion, thinly sliced shallot, cucumber, tomatoes. <b>Keep it generous</b> — this is a salad with beef in it, not the other way around.",
+"Dressing cups: juice of 6 limes, 4 tbsp fish sauce, 2 tsp palm sugar, chopped Thai chile, 2 tbsp toasted rice powder."],
+mac:[["5.5 oz grilled sirloin, cold",331,48],["¾ cup jasmine rice",158,3],["Herb salad + cucumber",35,2],["Lime-fish sauce dressing cup",45,1],["Toasted rice powder",20,0]],
+fin:["Lime-fish sauce + rice powder","Extra chile + lime","Chili crisp","Sriracha + scallion","Extra mint and shallot","Peanuts, chopped"],
+note:["Keep the rice powder in a separate dry container and add it at the desk. Wet rice powder is paste and loses the whole point.","warm|<b>Never microwave.</b> Room temperature, and the herbs make it feel like a fresh dish on day five."]},
+
+{n:"Baja Fish Tostadas",s:"Grilled mahi or cod, cabbage-lime slaw, chipotle crema, black beans. Shells packed dry and topped at the desk.",fam:"Baja",k:584,p:56,fz:"No",
+sat:"Nothing Saturday. Fish takes oil, chili powder, cumin, salt and lime zest 20 minutes before it goes on.",
+tl:{grill:"Fish fillets in a fish basket over direct, lid closed, 6–8 min. Do not flip.",pull:"Pull fish at <span class='temp'>135°F</span>. <span class='chill'>Chill completely</span>, then flake into large pieces.",veg:"Cabbage-lime slaw is raw and separate. No roasted vegetable.",starch:"Black beans warmed with cumin and garlic. Tostada shells stay in their bag, dry."},
+shop:[["MEAT","Mahi-mahi or cod fillets","2.75 lb"],["PRODUCE","Green cabbage or coleslaw mix","2 bags"],["PRODUCE","Red onion","2"],["PRODUCE","Limes","8"],["PRODUCE","Cilantro","2 bunches"],["PRODUCE","Radishes","1 bunch"],["PRODUCE","Jalapeños","2"],["PANTRY","Tostada shells","18"],["PANTRY","Black beans","2 cans"],["PANTRY","Chipotles in adobo","1 can"],["PANTRY","Chili powder, cumin, smoked paprika, oregano","—"]],
+steps:["<b>Tostadas are the answer to the desk-tortilla problem.</b> Flat, already crisp, packed dry in their own bag — nothing to heat and nothing to go soggy.",
+"<b>Use a fish basket.</b> Mahi and cod both tear on bare grates. Skin or presentation side down over direct, lid closed, 6–8 min, <b>do not flip.</b>",
+"Pull at <span class='temp'>135°F</span>. <span class='chill'>Chill completely</span>, then flake into large pieces — not shredded, you want chunks that sit on a shell.",
+"Beans: 2 drained cans warmed 10 min with garlic, cumin and a splash of their liquid. Mash about a third of them so they spread on the tostada.",
+"Slaw stays raw and separate: shredded cabbage, thin red onion, cilantro, lime, salt. <b>Dress the morning of.</b>",
+"Pickled red onion: 1 onion sliced thin, ½ cup lime juice, 1 tsp salt, 20 minutes. Its own container, keeps all week.",
+"Chipotle crema cups: 1½ cups Greek yogurt, 3 minced chipotles, lime, salt. <b>Three shells per day, in a separate bag, never in the container.</b>"],
+mac:[["5.5 oz grilled fish, cold",170,37],["3 tostada shells",195,4],["Black beans, ½ cup",114,8],["Cabbage-lime slaw",30,1],["Chipotle crema cup",50,5],["Pickled onion + radish",25,1]],
+fin:["Chipotle crema","Lime + hot sauce","Salsa verde","Pickled jalapeño","Cotija + cilantro","Chili crisp"],
+note:["Three shells is 195 kcal — the single biggest calorie line outside the protein. Drop to two if you want 65 calories back, or swap to a bowl and skip them entirely.","warm|<b>Do not freeze, never microwave.</b> Cold fish, dry shells, assembled in about forty seconds at the desk."]},
+
+{n:"Carne Asada Tacos",s:"Skirt steak grilled hard, salsa roja, onion and cilantro, black beans. Room temperature.",fam:"Mexican",k:611,p:56,fz:"No",
+sat:"Marinate 2.75 lb skirt: juice of 4 limes and 1 orange, 4 tbsp oil, 8 cloves garlic, 2 tbsp cumin, 1 tbsp chili powder, 1 tbsp oregano, 2½ tsp salt. <b>4 hours maximum</b> — citrus this heavy turns the surface mealy overnight.",
+tl:{grill:"Skirt on the hottest direct zone you can build, 3 min per side. This cut wants ferocious heat and almost no time.",pull:"Pull skirt at <span class='temp'>130°F</span>. Rest 10 min, then <span class='chill'>cool completely</span>.",veg:"Onions and jalapeños charred whole on direct. Salsa roja from charred romas.",starch:"Black beans warmed with cumin. Tortillas stay in their own bag."},
+shop:[["MEAT","Skirt steak (outside skirt if available)","2.75 lb"],["PRODUCE","Roma tomatoes","8"],["PRODUCE","White onion","4"],["PRODUCE","Limes","10"],["PRODUCE","Orange","1"],["PRODUCE","Cilantro","3 bunches"],["PRODUCE","Radishes","1 bunch"],["PRODUCE","Serrano or jalapeño","4"],["PRODUCE","Garlic","1 head"],["PANTRY","Corn tortillas, street size (4.5 in)","24"],["PANTRY","Black beans","2 cans"],["PANTRY","Cumin, chili powder, oregano","—"]],
+steps:["<b>Four hours in the marinade, no more.</b> Lime and orange this concentrated will cure the surface grey and mealy if you leave it overnight.",
+"Skirt is thin and fatty and wants the hottest fire you can build. <b>3 minutes per side, direct, and nothing else.</b> If your grill can go hotter, let it.",
+"Pull at <span class='temp'>130°F</span>. Rest 10 min, <span class='chill'>cool completely</span>, then slice <b>very thin, hard against the grain</b>, and chop into taco-sized pieces.",
+"Salsa roja: char 8 romas, 2 serranos and 1 halved onion on the grates until blackened. Blend with garlic, cilantro, lime, salt.",
+"Beans: 2 drained cans, 10 min with garlic and cumin.",
+"Onion-cilantro relish, its own container: 2 white onions diced fine, 2 bunches cilantro chopped, lime, salt. This is the only garnish a real taco needs.",
+"<b>4 street tortillas per day, in their own bag.</b> Twenty seconds in a damp paper towel in the office microwave, or thirty seconds a side on a dry skillet at home."],
+mac:[["5.5 oz skirt steak, sliced thin",332,42],["4 street corn tortillas",120,5],["Black beans, ½ cup",114,8],["Salsa roja",25,1],["Onion-cilantro + radish + lime",20,0]],
+fin:["Salsa roja + onion-cilantro","Salsa verde","Lime and salt only","Pickled red onion","Chipotle crema","Hot sauce + cotija"],
+note:["<b>Street-size corn tortillas, not flour.</b> Four small corn is 120 kcal and 6 g of fiber; two 8-inch flour is nearly 300 and no fiber. This is the single highest-leverage swap in the taco recipes.","warm|<b>Never microwave the steak.</b> Heat the tortillas, not the meat. Skirt reheated is skirt ruined."]},
+
+{n:"Pollo Asado Tacos",s:"Achiote-citrus chicken thighs, grilled poblano rajas, charred salsa verde, cotija.",fam:"Mexican",k:586,p:52,fz:"Yes",
+sat:"Marinate 3 lb thighs: 3 tbsp achiote paste dissolved in the juice of 2 oranges and 3 limes, 3 tbsp oil, 6 cloves garlic, 1 tbsp cumin, 1 tbsp oregano, 2½ tsp salt. 6–12 hours.",
+tl:{grill:"Thighs on — direct 4 min per side, then indirect. Poblanos charred whole alongside.",pull:"Pull thighs at <span class='temp'>157°F</span>. Rest 10 min.",veg:"Poblanos steamed 10 min, peeled and sliced into rajas. Onions charred alongside.",starch:"Rice folded with lime and cilantro. Tortillas stay in their own bag."},
+shop:[["MEAT","Boneless skinless chicken thighs","3 lb"],["PRODUCE","Poblano peppers","5"],["PRODUCE","White onion","3"],["PRODUCE","Tomatillos","1.5 lb"],["PRODUCE","Oranges","2"],["PRODUCE","Limes","7"],["PRODUCE","Cilantro","2 bunches"],["PRODUCE","Garlic","1 head"],["DAIRY","Cotija cheese","4 oz"],["PANTRY","Achiote (annatto) paste","1 block"],["PANTRY","Corn tortillas, street size (4.5 in)","24"],["PANTRY","Jasmine rice","1 cup dry"],["PANTRY","Cumin, oregano","—"]],
+steps:["<b>Achiote paste is the whole dish</b> — it's what makes this red-orange and faintly earthy rather than just citrus chicken. Dissolve the block in the warm citrus juice before anything else, or it stays in lumps.",
+"Direct 4 min per side, then indirect. Pull at <span class='temp'>157°F</span>. Rest, <span class='chill'>cool</span>, then chop into taco-sized pieces rather than slicing.",
+"Poblanos charred whole on the grates until blackened all over. Steam 10 min under foil, peel, seed, and slice into strips — that's rajas.",
+"Charred salsa verde: tomatillos husked and rinsed, then blistered on the grates with 1 halved onion. Blend with garlic, cilantro, lime, salt. Keep it coarse.",
+"Rice: 1 cup jasmine folded with lime and cilantro. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Onion-cilantro relish and crumbled cotija into their own containers.",
+"<b>4 street tortillas per day, separate bag.</b> Filling reheats fine; tortillas get warmed on their own."],
+mac:[["5.5 oz achiote thigh",326,41],["4 street corn tortillas",120,5],["Poblano rajas + onion",45,2],["Charred salsa verde",30,1],["Cotija, ½ oz",55,3],["Onion-cilantro + lime",10,0]],
+fin:["Salsa verde + cotija","Onion-cilantro + lime","Chipotle crema","Pickled red onion","Hot sauce","Extra rajas"],
+note:["The one taco lunch whose filling genuinely reheats — thigh in a wet marinade takes a microwave without complaint. The tortillas still get heated separately.","warm|Rajas are worth the extra ten minutes. Peeled charred poblano is a completely different ingredient from raw sliced pepper."]},
+
+{n:"Djaj Mishwi",s:"Lebanese grilled chicken with toum, vermicelli rice, fattoush, pickled turnips.",fam:"Lebanese",k:606,p:51,fz:"Yes",
+sat:"Marinate 3 lb thighs: juice of 3 lemons, 4 tbsp olive oil, 8 cloves garlic crushed to a paste with salt, 1 tbsp seven-spice, 2 tsp sumac, 2½ tsp salt. 6–12 hours.",
+tl:{grill:"Thighs on — direct 4 min per side for real char, then indirect. Lebanese grilled chicken wants more color than most.",pull:"Pull thighs at <span class='temp'>157°F</span>. Rest 10 min.",veg:"Tomatoes, onions and peppers charred whole on direct for the fattoush base.",starch:"Riz bi sha'riyeh — vermicelli toasted in oil until deep brown, then rice and stock."},
+shop:[["MEAT","Boneless skinless chicken thighs","3 lb"],["PRODUCE","Garlic","4 heads"],["PRODUCE","Lemons","10"],["PRODUCE","Roma tomatoes","6"],["PRODUCE","English cucumber","4"],["PRODUCE","Radishes","1 bunch"],["PRODUCE","Romaine","2 heads"],["PRODUCE","Mint","1 bunch"],["PRODUCE","Flat-leaf parsley","2 bunches"],["PRODUCE","Green onion","1 bunch"],["PANTRY","Neutral oil for toum (canola or grapeseed)","3 cups"],["PANTRY","Basmati rice","1 cup dry"],["PANTRY","Vermicelli, broken","½ cup"],["PANTRY","Sumac, seven-spice (baharat), pomegranate molasses","—"],["PANTRY","Pickled turnips","1 jar"],["PANTRY","Pita, for fattoush croutons","2 rounds"]],
+steps:["<b>Toum is the whole point and it is worth learning properly.</b> Food processor: 1 cup peeled garlic cloves and 2 tsp salt, run until pasted, scrape down. Then add 3 cups neutral oil <b>drop by drop at first</b>, alternating with 3 tbsp lemon juice every half cup. Rushing the oil breaks the emulsion and it will not come back without starting over with a fresh yolk-free base.",
+"<b>Calorie warning, and it's a real one.</b> Proper toum is essentially garlic-flavored oil — roughly 100 kcal per tablespoon, almost entirely fat. Make it, keep it in the fridge where it lasts a month, and <b>use one tablespoon per container, not four.</b> A hybrid of 2 tbsp toum stirred into ¾ cup Greek yogurt costs 60 kcal a serving instead and gets you most of the way.",
+"Two-zone fire. Thighs direct 4 min per side — <b>you want more char than a Mexican or Asian marinade would tolerate</b>, and lemon-garlic can take it. Then indirect to <span class='temp'>157°F</span>.",
+"Rest, <span class='chill'>cool</span>, slice against the grain.",
+"Riz bi sha'riyeh: toast ½ cup broken vermicelli in 1 tbsp oil until <b>deep brown, not golden</b> — this is where the flavor is. Add 1 cup rinsed basmati and 2½ cups stock, cover, 15 min. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Fattoush, its own container: romaine, tomato, cucumber, radish, green onion, mint, parsley. <b>Toasted pita croutons in a separate bag</b> — in the salad they're wet cardboard by Tuesday.",
+"Dressing cups: lemon, olive oil, 1 tbsp pomegranate molasses, 2 tsp sumac, garlic, salt. Pickled turnips into their own cups."],
+mac:[["5.5 oz grilled thigh",326,41],["½ cup vermicelli rice",110,3],["Fattoush + pita croutons",65,3],["Toum-yogurt cup",60,3],["Pickled turnips + sumac dressing",45,1]],
+fin:["Toum-yogurt","Straight toum, 1 tbsp","Extra sumac + lemon","Pickled turnip + parsley","Garlic-tahini sauce","Pomegranate molasses drizzle"],
+note:["<b>Seven-spice (sabaa baharat)</b> is allspice, black pepper, cinnamon, nutmeg, cloves, coriander and ginger. Blends vary by family and by shop — the Dearborn ones lean heavier on allspice than supermarket baharat. Worth buying from a Middle Eastern grocer rather than a spice aisle.","warm|Toum keeps a month in the fridge and gets sharper. One batch covers this recipe, the kafta, and anything else you want to put it on."]},
+
+{n:"Lebanese Kafta",s:"Seven-spice ground beef skewers, tabbouleh, hummus, vermicelli rice, toum.",fam:"Lebanese",k:648,p:55,fz:"Yes",
+sat:"Mix and chill: 3 lb ground beef 93/7 (or half beef half lamb), 1 grated onion squeezed bone dry, 1 cup finely chopped parsley, 1 tbsp seven-spice, 2 tsp allspice, 1 tsp cinnamon, 6 cloves garlic, 2½ tsp salt, 1½ tsp black pepper. No egg, no breadcrumb.",
+tl:{grill:"Kafta packed onto flat skewers in 6-inch logs, direct heat 3–4 min per side.",pull:"Pull kafta at <span class='temp'>160°F</span> — ground beef, not the 157 whole-muscle rule.",veg:"Whole tomatoes and onions charred on direct alongside the skewers, Lebanese-grill style.",starch:"Vermicelli rice — vermicelli toasted deep brown, then rice and stock."},
+shop:[["MEAT","Ground beef, 93/7 (or half beef, half lamb)","3 lb"],["PRODUCE","Yellow onion","4"],["PRODUCE","Flat-leaf parsley","4 bunches"],["PRODUCE","Mint","1 bunch"],["PRODUCE","Roma tomatoes","8"],["PRODUCE","Lemons","8"],["PRODUCE","Garlic","3 heads"],["PRODUCE","Green onion","1 bunch"],["PANTRY","Fine bulgur (#1)","½ cup"],["PANTRY","Basmati rice","1 cup dry"],["PANTRY","Vermicelli, broken","½ cup"],["PANTRY","Hummus, or chickpeas + tahini","16 oz"],["PANTRY","Seven-spice, allspice, cinnamon, sumac","—"],["PANTRY","Neutral oil for toum","3 cups"],["EQUIPMENT","Flat metal skewers","10"]],
+steps:["<b>No egg, no breadcrumb.</b> Lebanese kafta is meat, onion, parsley and spice — binders make it a meatball. The grated onion, squeezed genuinely dry, is what holds it together.",
+"Chop the parsley <b>very fine and use far more than feels reasonable</b> — a full cup packed for 3 lb. It's a structural ingredient here, not a garnish.",
+"<span class='chill'>Chill the mix 30 minutes</span> before forming. Pack onto <b>flat</b> skewers in 6-inch logs, pressing hard so there are no air pockets.",
+"Direct heat, 3–4 min per side. Pull at <span class='temp'>160°F</span> — this is ground beef, so the whole-muscle 157 rule does not apply.",
+"Whole tomatoes and quartered onions go on the grill alongside, blistered and blackened. That's how it's served in Dearborn and the charred tomato is half the plate.",
+"<b>Tabbouleh is a parsley salad, not a bulgur salad.</b> Ratio is roughly four parts parsley to one part fine bulgur — ½ cup dry #1 bulgur soaked 15 min in lemon juice, then 3 bunches of parsley chopped fine, mint, tomato, green onion, lemon, olive oil. Its own container.",
+"Vermicelli rice as in Djaj Mishwi — toast the vermicelli <b>deep brown</b>. Hummus and toum into separate cups."],
+mac:[["5.5 oz kafta",268,41],["½ cup vermicelli rice",110,3],["Tabbouleh",60,2],["Grilled tomato + onion",40,1],["Hummus, ¼ cup",100,5],["Toum-yogurt cup",70,3]],
+fin:["Toum + sumac","Garlic-tahini sauce","Lemon + extra parsley","Pickled turnip","Pomegranate molasses","Harissa-yogurt"],
+note:["93/7 beef rather than the traditional 80/20 or lamb. It costs some richness and saves roughly 160 kcal a serving — with hummus and toum already on the plate, the fat budget is spoken for.","warm|Four bunches of parsley looks absurd at the register. Three go in the tabbouleh, one in the meat. Both are correct."]},
+
+{n:"Bún Chả",s:"Vietnamese grilled pork patties, cold rice noodles, a mountain of herbs, nuoc cham.",fam:"Vietnamese",k:626,p:54,fz:"No",
+sat:"Mix and chill: 2.75 lb lean ground pork, 4 shallots grated, 6 cloves garlic, 2 tbsp fish sauce, 1 tbsp brown sugar, 1 tbsp black pepper, 1 tsp salt. 4–12 hours.",
+tl:{grill:"Patties formed 2 inches wide and flat, direct heat, 3 min per side. You want char on the edges.",pull:"Pull patties at <span class='temp'>160°F</span> — ground pork. Rest, then <span class='chill'>cool</span>.",veg:"No roasted vegetable. The herb pile is raw and enormous and separate.",starch:"Rice vermicelli boiled 4 min, rinsed cold, drained hard, tossed with a teaspoon of oil."},
+shop:[["MEAT","Ground pork, lean","2.75 lb"],["PRODUCE","Shallots","6"],["PRODUCE","Garlic","2 heads"],["PRODUCE","Mint","2 bunches"],["PRODUCE","Cilantro","2 bunches"],["PRODUCE","Thai basil or perilla","1 bunch"],["PRODUCE","Butter or leaf lettuce","2 heads"],["PRODUCE","English cucumber","3"],["PRODUCE","Carrots","1 lb"],["PRODUCE","Daikon radish","1"],["PRODUCE","Limes","8"],["PRODUCE","Thai chiles","4"],["PANTRY","Rice vermicelli (bún)","12 oz"],["PANTRY","Fish sauce","1 bottle"],["PANTRY","Rice vinegar, sugar, roasted peanuts","—"]],
+steps:["<b>Flat patties, not balls.</b> Two inches wide and about half an inch thick — you want maximum edge, because the char on the edge is the flavor of the dish.",
+"Direct heat, 3 min per side. Pull at <span class='temp'>160°F</span>. <span class='chill'>Cool completely.</span>",
+"Rice vermicelli: boil 4 min, <b>rinse under cold water until it stops feeling starchy</b>, drain hard, then toss with 1 tsp neutral oil. The oil is what stops it welding into a brick.",
+"<b>Honest caveat: the noodles will still clump by day three.</b> Fifteen seconds under cold running water at the sink loosens them completely. If that annoys you, use jasmine rice instead and you lose maybe 20% of the character.",
+"Pickled carrot and daikon: julienned, ¾ cup rice vinegar, 3 tbsp sugar, 1 tsp salt, 30 min. Keeps the whole week and gets better.",
+"<b>The herb pile is not a garnish — it is half the dish.</b> Lettuce, mint, cilantro, Thai basil, cucumber, all in a generous container of their own. Do not be modest here.",
+"Nuoc cham cups: ⅓ cup fish sauce, ⅓ cup lime juice, ⅓ cup water, ¼ cup sugar, 4 cloves garlic minced, chopped Thai chile. Peanuts in a dry container."],
+mac:[["5.5 oz grilled pork patties",289,42],["2 oz rice vermicelli",145,3],["Herb pile + lettuce + cucumber",40,3],["Pickled carrot + daikon",30,1],["Nuoc cham cup",40,1],["Roasted peanuts, ½ oz",82,4]],
+fin:["Nuoc cham + peanuts","Extra chile + lime","Chili crisp","Sriracha, thin","Extra herbs and pickle","Fried shallot"],
+note:["Nuoc cham is the one dressing here that is genuinely low-calorie — 40 kcal a serving, mostly from the sugar, and it carries the entire dish.","warm|<b>Never microwave.</b> Room temperature. The whole architecture is warm-ish pork against cold noodles and raw herbs."]},
+
+{n:"Char Siu Pork",s:"Chinese barbecue tenderloin, jasmine rice, grilled gai lan, cucumber pickle.",fam:"Chinese",k:588,p:51,fz:"Yes",
+sat:"Marinate 2.75 lb tenderloin, cut lengthwise into 2-inch strips: 4 tbsp hoisin, 3 tbsp soy, 2 tbsp honey, 2 tbsp Shaoxing wine, 1 tbsp sesame oil, 6 cloves garlic, 1 tbsp five-spice, 1 tsp white pepper, red fermented bean curd if you have it. 8–24 hours.",
+tl:{grill:"Strips on indirect first, 15 min, then direct 2 min per side to lacquer the surface. Sugar in the marinade — direct heat too early scorches it black.",pull:"Pull pork at <span class='temp'>145°F</span>. Rest 10 min, then <span class='chill'>cool</span> before slicing.",veg:"Gai lan or broccolini in the grill basket over direct, 6–8 min until blistered.",starch:"Jasmine rice — 2 cups dry for six full-cup portions."},
+shop:[["MEAT","Pork tenderloin","2.75 lb"],["PRODUCE","Gai lan or broccolini","2 lb"],["PRODUCE","Garlic","1 head"],["PRODUCE","Ginger","2 in"],["PRODUCE","Scallions","1 bunch"],["PRODUCE","English cucumber","3"],["PANTRY","Hoisin sauce","1 jar"],["PANTRY","Shaoxing wine","1 bottle"],["PANTRY","Honey, soy sauce, sesame oil, five-spice, white pepper","—"],["PANTRY","Jasmine rice","2 cups dry"],["PANTRY","Rice vinegar, sesame seeds","—"]],
+steps:["<b>Cut the tenderloin lengthwise into long 2-inch strips</b> before marinating. Char siu is about surface — strips give you roughly double the lacquered exterior per pound.",
+"Reserve ½ cup of the marinade <b>before it touches raw pork.</b> Simmer it 5 minutes with 1 tbsp honey into a glaze for the sauce cups.",
+"<b>Reverse the usual order.</b> Indirect heat first, 15 min, then direct for the last 2 minutes per side to lacquer. Hoisin and honey scorch to bitter carbon if they see direct flame early.",
+"Pull at <span class='temp'>145°F</span> — pork tenderloin, not the poultry rule. Rest 10 min, <span class='chill'>cool</span>, slice ¼ inch on a slight bias.",
+"Gai lan or broccolini, oil and salt, grill basket over direct 6–8 min. Blistered, still with snap.",
+"Jasmine rice, 2 cups dry — this build runs a full cup per container because tenderloin is so lean. <span class='chill'>Sheet pan, fridge inside an hour.</span>",
+"Cucumber pickle: sliced thin, ¼ cup rice vinegar, 1 tsp sugar, pinch salt. Separate container."],
+mac:[["5.5 oz char siu tenderloin",223,41],["1 cup jasmine rice",210,4],["Grilled gai lan",50,3],["Cucumber pickle",25,1],["Char siu glaze cup",60,1],["Scallion + sesame",20,1]],
+fin:["Char siu glaze + sesame","Chili crisp","Soy + rice vinegar","Hoisin, thin layer","Scallion + white pepper","Sriracha"],
+note:["Traditional char siu uses pork shoulder or belly — this runs tenderloin at roughly 40% of the calories for the same protein, and the marinade is doing most of the work anyway.","warm|Red fermented bean curd is what makes restaurant char siu that colour. Optional, cheap at any Asian grocer, and there is no real substitute for it."]},
+
+{n:"Piri-Piri Chicken",s:"Portuguese chili-and-vinegar chicken, roasted potatoes, grilled peppers, tomato-onion salad.",fam:"Portuguese",k:596,p:48,fz:"Yes",
+sat:"Blend and marinate 3 lb thighs: 8 red chiles (bird's eye or fresno), 8 cloves garlic, ⅓ cup red wine vinegar, 3 tbsp olive oil, 2 tbsp smoked paprika, 1 tbsp oregano, juice and zest of 2 lemons, 2½ tsp salt. 8–24 hours.",
+tl:{grill:"Thighs on — direct 4 min per side, then indirect. No sugar in this marinade, so it takes hard direct heat well.",pull:"Pull thighs at <span class='temp'>157°F</span>. Rest 10 min.",veg:"Peppers and onions in slabs on direct until blistered. Potatoes in the basket over indirect.",starch:"Potatoes roasted with paprika and garlic — parboil 8 min first."},
+shop:[["MEAT","Boneless skinless chicken thighs","3 lb"],["PRODUCE","Red chiles (bird's eye or fresno)","10"],["PRODUCE","Yukon gold potatoes","2.5 lb"],["PRODUCE","Bell peppers","4"],["PRODUCE","Red onion","3"],["PRODUCE","Roma tomatoes","6"],["PRODUCE","Lemons","5"],["PRODUCE","Garlic","2 heads"],["PRODUCE","Flat-leaf parsley","1 bunch"],["PANTRY","Red wine vinegar","—"],["PANTRY","Smoked paprika, oregano, bay leaf","—"]],
+steps:["<b>No sugar anywhere in this marinade</b> — that's what separates piri-piri from most grill sauces, and it means the chicken takes hard direct heat without scorching. Use the fire.",
+"Blend the marinade smooth and reserve ½ cup <b>before</b> it touches raw chicken, for the sauce cups.",
+"Direct 4 min per side, then indirect to <span class='temp'>157°F</span>. Rest, <span class='chill'>cool</span>, slice.",
+"Potatoes: halved, parboiled 8 min, tossed with oil, smoked paprika and garlic, then grill basket over indirect until crusted, 15 min.",
+"Peppers and onions in slabs, direct until blistered. Chop.",
+"Tomato-onion salad, its own container: sliced tomato, thin red onion, parsley, red wine vinegar, olive oil, salt.",
+"Sauce cups: the reserved marinade thinned with a little vinegar and oil. It is hot — taste before you commit."],
+mac:[["5.5 oz grilled thigh",326,41],["Roasted paprika potatoes",130,3],["Grilled peppers + onions",55,2],["Tomato-onion salad",30,1],["Piri-piri sauce cup",55,1]],
+fin:["Piri-piri sauce","Lemon + parsley","Extra chile, straight","Garlic-lemon yogurt","Smoked paprika oil","Vinegar and flaky salt"],
+note:["Eight bird's eye chiles across 3 lb of chicken is genuinely hot. Fresnos give you the same colour and roughly a quarter of the heat if you'd rather taste the paprika.","warm|Lowest protein of the chicken lunches at 48 g — still above the floor, but if you want the margin, swap the potatoes for ½ cup of black-eyed peas."]},
+
+{n:"Carolina Vinegar BBQ Chicken",s:"Eastern North Carolina style — vinegar and pepper, no tomato, no sugar. Collards, black-eyed peas, vinegar slaw.",fam:"Carolina",k:646,p:54,fz:"Yes",
+sat:"Brine 3 lb thighs: 4 cups water, ¼ cup kosher salt, 2 tbsp brown sugar, 1 tbsp black pepper, 4 hours only. Then pat dry and rub with 2 tbsp smoked paprika, 1 tbsp black pepper, 2 tsp cayenne, 1 tbsp garlic powder.",
+tl:{grill:"Thighs on — direct 4 min per side, then indirect, mopped with the vinegar sauce every few minutes.",pull:"Pull thighs at <span class='temp'>157°F</span>. Rest 10 min, then chop rather than slice.",veg:"Collards braised with stock and vinegar, 40 min. Or green beans in the grill basket.",starch:"Black-eyed peas simmered with onion and bay. Rice or a potato on the side."},
+shop:[["MEAT","Boneless skinless chicken thighs","3 lb"],["PRODUCE","Collard greens","2 bunches"],["PRODUCE","Green cabbage or coleslaw mix","2 bags"],["PRODUCE","Yellow onion","3"],["PRODUCE","Garlic","1 head"],["PRODUCE","Lemons","2"],["PANTRY","Apple cider vinegar","1 large bottle"],["PANTRY","Black-eyed peas","3 cans"],["PANTRY","Crushed red pepper, cayenne, smoked paprika, black pepper","—"],["PANTRY","Chicken stock","1 qt"],["PANTRY","Long-grain rice","1 cup dry"]],
+steps:["<b>Eastern North Carolina sauce is vinegar, red pepper and salt. That's it.</b> No tomato, no molasses, no brown sugar. It's also why this build lands 150–200 kcal under any Kansas City-style equivalent — the sauce is essentially free.",
+"Sauce: 2 cups cider vinegar, 2 tbsp crushed red pepper, 1 tbsp black pepper, 1 tsp cayenne, 1 tbsp salt, 1 tsp sugar. <b>Let it sit an hour before using.</b> It gets sharper for a week.",
+"<b>Brine only 4 hours</b>, not overnight — thighs in a 5% brine go spongy past about six.",
+"Direct 4 min per side, then indirect, <b>mopping with the vinegar sauce every 3–4 minutes.</b> Pull at <span class='temp'>157°F</span>.",
+"Rest, <span class='chill'>cool</span>, then <b>chop rather than slice</b> — Carolina barbecue is chopped, and it holds sauce far better that way.",
+"Collards: stemmed, sliced, braised 40 min with onion, 2 cups stock, ¼ cup cider vinegar and a pinch of red pepper. Black-eyed peas simmered 15 min with onion and bay.",
+"Slaw is <b>vinegar, not mayonnaise</b> — cabbage, cider vinegar, black pepper, a teaspoon of sugar. Its own container, dressed the morning of."],
+mac:[["5.5 oz chopped BBQ thigh",326,41],["Vinegar sauce",15,0],["Black-eyed peas, ½ cup",100,7],["Braised collards",60,3],["½ cup long-grain rice",105,2],["Vinegar slaw",40,1]],
+fin:["Extra vinegar sauce","Hot sauce","Crushed red pepper + vinegar","Pickled jalapeño","Chow-chow relish","Black pepper and lemon"],
+note:["The vinegar sauce keeps indefinitely and improves for weeks. Make a double batch and keep a bottle in the fridge — it's excellent on almost everything else here.","warm|Collards give you 5 g of fiber and a genuine mineral hit for 60 kcal. They're the most underrated vegetable in this manual."]}
+];
+
+const D=[
+{n:"Turkey Chili",s:"Kidney and black beans, tomato, ground meat browned on the griddle plate outside.",fam:"American",k:695,p:54,fz:"Yes",
+tl:{sear:"Griddle plate on the grates. Brown 2.5 lb turkey hard, then char onions and peppers on the same surface.",pot:"Everything into the Dutch oven with crushed tomatoes, four cans of beans, chipotle and spices.",simmer:90,finish:"Lid cracked the last 30 min to reduce. Taste for salt at the end, not the start."},
+shop:[["MEAT","Ground turkey, 93/7","2.5 lb"],["PRODUCE","Yellow onion","3"],["PRODUCE","Bell peppers","3"],["PRODUCE","Garlic","1 head"],["PRODUCE","Cilantro","1 bunch"],["PRODUCE","Limes","3"],["PANTRY","Crushed tomatoes","28 oz can"],["PANTRY","Kidney beans","2 cans"],["PANTRY","Black beans","2 cans"],["PANTRY","Chipotles in adobo","1 can"],["PANTRY","Chili powder, cumin, smoked paprika, oregano","—"],["PANTRY","Jasmine rice","1 cup dry"],["FROZEN","Mixed vegetables","1 bag"]],
+steps:["<b>Cast iron or griddle plate on the grill grates.</b> Mess stays outside, better crust than a stove, and you get a searing surface for everything else.",
+"Brown 2.5 lb turkey hard on the griddle, breaking it up. Don't stir constantly — let it sit and crust.",
+"Onions and peppers on the same griddle until charred at the edges. Everything into a Dutch oven.",
+"Add crushed tomatoes, all four cans of beans (drained), 2 minced chipotles plus 1 tbsp adobo, 3 tbsp chili powder, 1 tbsp cumin, 1 tbsp smoked paprika, 2 tsp oregano, 2 tsp salt, 1 cup water.",
+"Simmer covered <span class='temp'>90 minutes</span>, lid cracked the last 30 to reduce.",
+"<span class='chill'>Cool uncovered until steam stops, then refrigerate.</span> Portion six.",
+"Three to the fridge, <b>three flat in freezer bags.</b> Flat bags thaw in half the time and stack."],
+mac:[["1 serving chili",480,49],["½ cup jasmine rice",105,2],["Frozen vegetable side",60,3],["Yogurt + cilantro finish",50,4]],
+fin:["Plain","Hot sauce","Greek yogurt + cilantro","Pickled red onion","Chili crisp + lime","Cotija + jalapeño"],
+note:["Better on day four than day one. Most forgiving dish in the manual and the right choice for a chaotic week.","warm|Two cans of each bean gives 14 g fiber per serving — a third of your daily target from one dish."]},
+
+{n:"Chicken Tinga",s:"Chipotle and charred tomato, thighs grilled first, then shredded into the sauce.",fam:"Mexican",k:690,p:60,fz:"Yes",
+tl:{sear:"Char tomatoes and halved onions directly on the grates until blackened, 8–10 min. Grill the thighs alongside to 157°F.",pot:"Blend the charred vegetables with chipotle and stock. Shredded thighs into the Dutch oven with the sauce and a bay leaf.",simmer:35,finish:"Simmer uncovered until it thickens and clings. It should not be soupy."},
+shop:[["MEAT","Boneless skinless chicken thighs","3.5 lb"],["PRODUCE","Roma tomatoes","2 lb"],["PRODUCE","White onion","3"],["PRODUCE","Garlic","1 head"],["PRODUCE","Limes","4"],["PRODUCE","Cilantro","2 bunches"],["PANTRY","Chipotles in adobo","1 can"],["PANTRY","Chicken stock","1 qt"],["PANTRY","Oregano, cumin, bay leaf","—"],["PANTRY","Jasmine rice","1 cup dry"],["PANTRY","Black beans","2 cans"]],
+steps:["Two-zone fire. <b>Char the tomatoes and 2 halved onions directly on the grates</b> until blackened in spots, 8–10 min.",
+"Grill the thighs at the same time — direct 4 min per side, then indirect. Pull at <span class='temp'>157°F</span>. You are not cooking them through in the pot; you're cooking them here.",
+"Blend the charred tomatoes and onion with 3 chipotles plus 2 tbsp adobo, 5 cloves garlic, 1 tbsp oregano, 1 tsp cumin, 1 cup stock, 2 tsp salt.",
+"Shred the thighs with two forks. Into a Dutch oven with the sauce and a bay leaf.",
+"Simmer uncovered <span class='temp'>35 minutes</span> until it thickens.",
+"<span class='chill'>Cool, portion six.</span> Three fridge, three freezer, flat.",
+"Rice and a drained can of black beans on the side. <span class='chill'>Rice cools on a sheet pan.</span>"],
+mac:[["1 serving tinga",455,50],["½ cup rice + black beans",148,7],["Grilled or frozen vegetable",55,2],["Lime + cilantro finish",32,1]],
+fin:["Lime + raw onion","Greek yogurt + cilantro","Salsa verde","Pickled jalapeño","Hot sauce + cotija","Avocado, if you have it"],
+note:["Grilling the thighs before shredding is the whole point — char you can't get from poaching, and the sauce protects it through six days.","warm|Charring tomatoes on the grate rather than roasting indoors is a real flavor difference, not a technicality."]},
+
+{n:"Thai Red Curry",s:"Light coconut milk, grilled thigh, green beans and peppers.",fam:"Thai",k:700,p:52,fz:"Yes",
+tl:{sear:"Grill thighs to 157°F and chunk them. Peppers and onion in slabs until blistered.",pot:"Fry 4 tbsp curry paste in oil 2 min until it darkens — not optional. Add coconut milk, stock, fish sauce, ginger.",simmer:35,finish:"Grilled chicken and vegetables in for the last 20 min. Lime juice off the heat."},
+shop:[["MEAT","Boneless skinless chicken thighs","3.5 lb"],["PRODUCE","Green beans","1 lb"],["PRODUCE","Bell peppers","3"],["PRODUCE","Yellow onion","2"],["PRODUCE","Ginger","3 in"],["PRODUCE","Limes","4"],["PRODUCE","Thai basil or cilantro","1 bunch"],["PANTRY","Red curry paste","1 jar"],["PANTRY","Light coconut milk","3 cans"],["PANTRY","Fish sauce","1 bottle"],["PANTRY","Chicken stock","1 qt"],["PANTRY","Jasmine rice","1 cup dry"]],
+steps:["Grill the thighs — direct 4 min per side, indirect to finish, pull at <span class='temp'>157°F</span>. Chunk after resting.",
+"Peppers and onion in slabs on the grill until blistered. Chop.",
+"In a Dutch oven, fry 4 tbsp red curry paste in 1 tbsp oil for 2 minutes until it darkens and smells sharp. <b>Not optional</b> — unfried paste tastes raw and flat.",
+"Add 3 cans light coconut milk, 1 cup stock, 2 tbsp fish sauce, 1 tbsp grated ginger. Simmer 15 min.",
+"Add the grilled chicken, peppers, onion and green beans. Simmer <span class='temp'>20 more minutes</span>. Juice of 2 limes off the heat.",
+"<span class='chill'>Cool, portion six.</span> Three fridge, three freezer, flat.",
+"Light coconut milk, not full-fat — saves roughly 120 kcal per serving and the paste carries the flavor regardless."],
+mac:[["1 serving curry",495,49],["½ cup jasmine rice",105,2],["Extra green beans",60,3],["Lime + basil finish",40,1]],
+fin:["Lime + Thai basil","Fish sauce + chili","Chili crisp","Sriracha","Lime, cilantro, peanuts","Extra fish sauce"],
+note:["Freezes better than almost anything here — coconut curry holds through a freeze-thaw where cream sauces break.","warm|Fry the paste. Two minutes, and it's the difference between this and a can of soup."]},
+
+{n:"Beef & Barley Soup",s:"Chuck seared on the grill, pearl barley, carrot and celery.",fam:"American",k:690,p:50,fz:"Yes",
+tl:{sear:"Sear cubed chuck on the grill over direct heat, 2 min per side, in batches so it browns rather than steams.",pot:"Into the Dutch oven with tomato paste, 2 qt beef stock, onion, garlic, thyme and bay.",simmer:160,finish:"Carrots, celery and barley added for the last 40 min. Then chill overnight and skim the fat cap."},
+shop:[["MEAT","Beef chuck roast","3 lb"],["PRODUCE","Carrots","1.5 lb"],["PRODUCE","Celery","1 bunch"],["PRODUCE","Yellow onion","3"],["PRODUCE","Garlic","1 head"],["PRODUCE","Thyme","1 bunch"],["PRODUCE","Flat-leaf parsley","1 bunch"],["PANTRY","Pearl barley","1.5 cups dry"],["PANTRY","Beef stock","2 qt"],["PANTRY","Tomato paste","1 small can"],["PANTRY","Bay leaf, black peppercorn","—"]],
+steps:["Trim the chuck of heavy exterior fat, cut into 1½-inch cubes, salt generously.",
+"<b>Sear on the grill over direct heat</b>, 2 min per side, in batches. This is the fond the whole soup is built on.",
+"Into a Dutch oven with 2 tbsp tomato paste, cook 2 min. Add 2 qt beef stock, onion, garlic, thyme, bay, peppercorns.",
+"Simmer covered <span class='temp'>2 hours</span> until the beef shreds under a fork.",
+"Add carrots, celery and 1½ cups pearl barley. Simmer <span class='temp'>40 more minutes</span> uncovered.",
+"<span class='chill'>Cool uncovered, refrigerate overnight, skim the solid fat cap in the morning</span> — chuck throws a lot, and skimming removes 150–200 kcal per serving.",
+"Portion six. Barley absorbs overnight — add stock when reheating."],
+mac:[["1 serving soup, barley included",520,47],["Side vegetable",60,3],["Bread or extra barley",50,0],["Parsley + pepper finish",60,0]],
+fin:["Parsley + cracked pepper","Sherry vinegar, a splash","Horseradish-yogurt","Hot sauce","Grated parmesan","Dill + lemon"],
+note:["The overnight skim is worth 150–200 kcal per serving on a fatty cut. Ten seconds, and it is not optional if the macros are going to hold.","warm|Longest cook in the manual at about 3½ hours. Start it first, and don't pair it with a lunch that monopolizes the grill."]},
+
+{n:"Lentil & Sausage Stew",s:"Grilled chicken sausage, brown lentils, kale.",fam:"Rustic European",k:685,p:51,fz:"Yes",
+tl:{sear:"Grill sausages whole over indirect to 165°F, about 15 min, then 2 min direct to blister the casings. Slice into coins.",pot:"Onion, carrot and celery softened 8 min, then lentils, diced tomatoes, 2 qt stock and bay.",simmer:45,finish:"Sausage coins and chopped kale in the last 10 min. Lemon juice off the heat."},
+shop:[["MEAT","Chicken or turkey sausage, uncooked","2 lb"],["PRODUCE","Lacinato kale","2 bunches"],["PRODUCE","Carrots","1 lb"],["PRODUCE","Celery","1 bunch"],["PRODUCE","Yellow onion","2"],["PRODUCE","Garlic","1 head"],["PRODUCE","Lemons","2"],["PANTRY","Brown or green lentils","2 cups dry"],["PANTRY","Diced tomatoes","28 oz can"],["PANTRY","Chicken stock","2 qt"],["PANTRY","Smoked paprika, thyme, bay leaf, red pepper flake","—"]],
+steps:["<b>Grill the sausages whole</b> over indirect until <span class='temp'>165°F</span>, about 15 min, turning. Then 2 min over direct to blister the casings. Slice into coins after they cool slightly.",
+"Dutch oven: onion, carrot, celery in 1 tbsp oil, 8 min. Add garlic, 1 tbsp smoked paprika, 1 tsp thyme, ½ tsp red pepper flake.",
+"Add 2 cups lentils, diced tomatoes, 2 qt stock, bay leaf. Simmer <span class='temp'>35 minutes</span> until tender but not collapsed.",
+"Add the sausage coins and 2 bunches chopped kale. Simmer <span class='temp'>10 more minutes</span>. Lemon juice off the heat.",
+"<span class='chill'>Cool, portion six.</span> Three fridge, three freezer.",
+"<b>No rice needed</b> — the lentils are the starch. The one dinner that doesn't need a side grain."],
+mac:[["1 serving stew, lentils included",565,48],["Side vegetable or salad",60,2],["Lemon + parmesan finish",60,1]],
+fin:["Lemon + cracked pepper","Grated parmesan","Chili crisp","Sherry vinegar","Greek yogurt + dill","Olive oil and flaky salt"],
+note:["18 g fiber per serving — highest in the manual, and the best dinner to pair with a lower-fiber lunch.","warm|Lentils go from tender to mush in about 8 minutes. Check at 30, not 40."]},
+
+{n:"Pork Shoulder Salsa Verde",s:"Charred tomatillo salsa made on the grill, half of it reserved raw for the table.",fam:"Mexican",k:690,p:57,fz:"Yes",
+tl:{sear:"Char tomatillos, poblanos, jalapeños and onion on the grates 8–10 min. Steam 10 min, peel poblanos, blend. Then sear the trimmed pork, 8 min.",pot:"3½ cups salsa plus 1 cup stock and the pork into the Dutch oven at 300°F, covered. <span class='chill'>Reserve 2 cups salsa raw to the fridge.</span>",simmer:180,finish:"Shred. Refrigerate the whole pot overnight, then lift the fat cap off in the morning before portioning."},
+shop:[["MEAT","Boneless pork shoulder (Boston butt)","4 lb"],["PRODUCE","Tomatillos","2 lb"],["PRODUCE","Poblano peppers","3"],["PRODUCE","Jalapeños","2"],["PRODUCE","White onion","2"],["PRODUCE","Garlic","2 heads"],["PRODUCE","Cilantro","2 bunches"],["PRODUCE","Limes","4"],["PANTRY","Chicken stock","1 qt"],["PANTRY","Cumin, Mexican oregano","—"],["PANTRY","Jasmine rice","1 cup dry"]],
+steps:["<b>Trim the fat cap hard.</b> You're throwing away 6–8 oz of pure fat — you paid for weight, not calories. Cut into 3-inch chunks, salt.",
+"<b>Salsa first.</b> Husk and rinse the tomatillos until they squeak. Tomatillos, poblanos, jalapeños and 1 halved onion straight on the hot side, 8–10 min, until blistered and blackened in spots.",
+"Vegetables into a bowl, covered 10 min. Peel the poblanos — the skins slip off — and pull the stems. <b>Do not peel the tomatillos.</b>",
+"Blend with 6 raw garlic cloves, 1½ bunches cilantro, juice of 2 limes, 1 tsp cumin, 1 tsp oregano, 1½ tsp salt. Coarse, not smooth. Yields about 5½ cups.",
+"<b>Split it:</b> 3½ cups into the pot, <span class='chill'>2 cups reserved raw to the fridge.</span> Three hours of braising kills the brightness — the reserved salsa is what goes on at the table.",
+"Sear the pork on the grill, all sides, 8 min. Into a Dutch oven with the braising salsa plus 1 cup stock. <span class='temp'>300°F, covered, 3 hours.</span>",
+"Shred. <span class='chill'>Refrigerate the whole pot overnight, then lift the solid fat cap off in the morning</span> — worth 150–250 kcal per serving. Then portion six."],
+mac:[["6.5 oz shredded pork, skimmed",480,50],["Reserved raw salsa verde",45,2],["½ cup jasmine rice",105,2],["Side vegetable",60,3]],
+fin:["Raw salsa verde","Lime + cilantro + raw onion","Hot sauce","Greek yogurt","Pickled red onion","Salsa + cotija"],
+note:["The overnight skim is mandatory on shoulder. Skip it and this dish quietly costs a third of your weekly deficit.","warm|If you'd rather not deal with the fat, boneless pork sirloin roast braises nearly as well at roughly 60% of the calories."]},
+
+{n:"Chicken Cacciatore",s:"Grilled thighs, tomato, peppers, mushrooms, olives.",fam:"Italian",k:685,p:53,fz:"Yes",
+tl:{sear:"Grill thighs to 157°F. Peppers and onion in slabs until blistered. Mushrooms on the griddle plate until deeply browned — don't crowd them.",pot:"Crushed tomatoes, stock, garlic, herbs, capers and olives into the Dutch oven, then everything grilled.",simmer:40,finish:"Simmer uncovered until it thickens. Parsley at the table, not in the pot."},
+shop:[["MEAT","Boneless skinless chicken thighs","3.5 lb"],["PRODUCE","Cremini mushrooms","1 lb"],["PRODUCE","Bell peppers","3"],["PRODUCE","Yellow onion","2"],["PRODUCE","Garlic","1 head"],["PRODUCE","Flat-leaf parsley","1 bunch"],["PANTRY","Crushed tomatoes","28 oz can"],["PANTRY","Castelvetrano or kalamata olives","1 cup"],["PANTRY","Chicken stock","1 qt"],["PANTRY","Oregano, rosemary, red pepper flake, capers","—"],["PANTRY","Jasmine rice or polenta","1 cup dry"]],
+steps:["Grill the thighs — direct 4 min per side, indirect to finish, pull at <span class='temp'>157°F</span>. Chunk after resting.",
+"Peppers and onion in slabs on the grill until blistered. Chop.",
+"Mushrooms on the cast-iron griddle over direct until deeply browned. <b>Don't crowd them</b> — crowded mushrooms steam and never recover.",
+"Dutch oven: crushed tomatoes, 1 cup stock, garlic, 1 tbsp oregano, 1 tsp rosemary, ½ tsp red pepper flake, 2 tbsp capers, 1 cup olives.",
+"Add the grilled chicken, peppers, onion and mushrooms. Simmer uncovered <span class='temp'>40 minutes</span>.",
+"<span class='chill'>Cool, portion six.</span> Three fridge, three freezer, flat.",
+"Parsley goes on at the table."],
+mac:[["1 serving cacciatore",490,50],["½ cup rice or polenta",105,2],["Side vegetable",60,3],["Parsley + parmesan finish",30,2]],
+fin:["Parsley + parmesan","Lemon zest","Chili crisp","Extra olives + capers","Balsamic, a few drops","Red pepper flake + oil"],
+note:["Olives and capers are the salt here. Taste before adding any, or you'll overshoot.","warm|Mushrooms need space on the griddle. Two batches beats one crowded batch every time."]},
+
+{n:"Moroccan Chicken Tagine",s:"Chickpeas, apricot, warm spices, lemon and cilantro.",fam:"North African",k:700,p:52,fz:"Yes",
+tl:{sear:"Grill thighs to 157°F and chunk them.",pot:"Three sliced onions softened 15 minutes — do not rush this. Spices bloomed 60 sec, then stock, carrots, apricots and chickpeas.",simmer:35,finish:"Grilled chicken added, then lemon and cilantro off the heat."},
+shop:[["MEAT","Boneless skinless chicken thighs","3.5 lb"],["PRODUCE","Yellow onion","3"],["PRODUCE","Carrots","1 lb"],["PRODUCE","Garlic","1 head"],["PRODUCE","Ginger","2 in"],["PRODUCE","Cilantro","1 bunch"],["PRODUCE","Lemons","3"],["PANTRY","Chickpeas","2 cans"],["PANTRY","Dried apricots","1 cup"],["PANTRY","Chicken stock","1 qt"],["PANTRY","Cumin, coriander, cinnamon, turmeric, saffron (optional)","—"],["PANTRY","Pearl couscous","1 cup dry"]],
+steps:["Grill the thighs — direct 4 min per side, indirect, pull at <span class='temp'>157°F</span>. Chunk after resting.",
+"Dutch oven: 3 sliced onions in 1 tbsp oil, <b>15 minutes</b> until genuinely soft and sweet. Rushing this is the most common way this dish goes wrong.",
+"Add garlic, grated ginger, 1 tbsp cumin, 2 tsp coriander, 1 tsp cinnamon, 1 tsp turmeric, saffron if you have it. Bloom 60 seconds.",
+"Add 1 qt stock, carrots, 1 cup chopped dried apricots, 2 drained cans chickpeas, 2 tsp salt.",
+"Add the grilled chicken. Simmer <span class='temp'>35 minutes</span> uncovered. Lemon and cilantro off the heat.",
+"<span class='chill'>Cool, portion six.</span> Three fridge, three freezer.",
+"Pearl couscous on the side — toast dry, cook in stock 10 min. <span class='chill'>Cool on a sheet pan.</span>"],
+mac:[["1 serving tagine",510,48],["½ cup pearl couscous",108,4],["Side vegetable",60,2],["Lemon + cilantro finish",22,1]],
+fin:["Lemon + cilantro","Harissa","Greek yogurt","Toasted almonds","Preserved lemon + olive","Yogurt + mint"],
+note:["The apricots read savory here, not sweet — doing what sugar does in a barbecue sauce, with fiber attached.","warm|Fifteen minutes on the onions. The one dinner where a shortcut is obvious in the final dish."]},
+
+{n:"White Chicken Chili",s:"White beans, charred poblano, cumin, lime.",fam:"Southwestern",k:685,p:54,fz:"Yes",
+tl:{sear:"Char poblanos and jalapeños on the grates until blackened. Steam 10 min, peel, seed, chop. Grill thighs to 157°F and shred.",pot:"Onions softened 8 min, spices, 2 qt stock, three cans of white beans and the chopped chiles. Purée one cup of beans and stir it back in.",simmer:30,finish:"Shredded chicken added. Lime and cilantro off the heat."},
+shop:[["MEAT","Boneless skinless chicken thighs","3.5 lb"],["PRODUCE","Poblano peppers","4"],["PRODUCE","White onion","3"],["PRODUCE","Garlic","1 head"],["PRODUCE","Limes","4"],["PRODUCE","Cilantro","2 bunches"],["PRODUCE","Jalapeños","2"],["PANTRY","Cannellini or great northern beans","3 cans"],["PANTRY","Chicken stock","2 qt"],["PANTRY","Cumin, coriander, Mexican oregano","—"],["PANTRY","Jasmine rice","1 cup dry"]],
+steps:["<b>Char the poblanos and jalapeños on the grill</b> until blackened on all sides. Steam 10 min under foil, peel, seed, chop.",
+"Grill the thighs alongside — direct 4 min per side, indirect, pull at <span class='temp'>157°F</span>. Shred after resting.",
+"Dutch oven: 3 chopped onions, 8 min. Add garlic, 1 tbsp cumin, 2 tsp coriander, 1 tbsp oregano.",
+"Add 2 qt stock, 3 drained cans white beans, and the chopped chiles.",
+"<b>Purée one cup of the beans and stir it back in.</b> That's the thickener — no cream, no flour, no calories.",
+"Add the shredded chicken. Simmer <span class='temp'>30 minutes</span>. Juice of 3 limes and cilantro off the heat.",
+"<span class='chill'>Cool, portion six.</span> Three fridge, three freezer."],
+mac:[["1 serving chili",495,50],["½ cup jasmine rice",105,2],["Side vegetable",60,2],["Yogurt + lime finish",25,2]],
+fin:["Lime + cilantro","Greek yogurt","Pickled jalapeño","Hot sauce","Cotija + raw onion","Avocado, if you have it"],
+note:["The puréed-bean thickener keeps this at 495 kcal. Most white chili recipes use cream cheese or heavy cream and land 200 kcal higher.","warm|Fresh charred poblanos rather than canned green chile. Costs ten minutes on a grill you already lit."]},
+
+{n:"Coconut Chicken Dal",s:"Red lentils, light coconut milk, spinach, warm spices.",fam:"Indian",k:690,p:51,fz:"Yes",
+tl:{sear:"Grill thighs to 157°F and chunk them.",pot:"Mustard seed popped in oil, onions 10 min, dry spices bloomed 60 sec, then lentils, tomatoes, coconut milk and stock.",simmer:35,finish:"Grilled chicken and spinach in the last 5 min. Lime off the heat."},
+shop:[["MEAT","Boneless skinless chicken thighs","3 lb"],["PRODUCE","Yellow onion","3"],["PRODUCE","Ginger","3 in"],["PRODUCE","Garlic","1 head"],["PRODUCE","Baby spinach","10 oz"],["PRODUCE","Cilantro","1 bunch"],["PRODUCE","Limes","3"],["PANTRY","Red lentils","2 cups dry"],["PANTRY","Light coconut milk","2 cans"],["PANTRY","Diced tomatoes","28 oz can"],["PANTRY","Chicken stock","1 qt"],["PANTRY","Turmeric, cumin, coriander, garam masala, mustard seed","—"],["PANTRY","Basmati rice","1 cup dry"]],
+steps:["Grill the thighs — direct 4 min per side, indirect, pull at <span class='temp'>157°F</span>. Chunk after resting.",
+"Dutch oven: 1 tbsp oil, 1 tsp mustard seed until they pop. Add 3 chopped onions, 10 min.",
+"Add garlic, 2 tbsp grated ginger, 1 tbsp turmeric, 1 tbsp cumin, 2 tsp coriander, 2 tsp garam masala. <b>Bloom 60 seconds</b> — dry spices in hot oil, not in liquid.",
+"Add 2 cups red lentils, diced tomatoes, 2 cans light coconut milk, 1 qt stock, 2 tsp salt.",
+"Simmer <span class='temp'>30 minutes</span>. Red lentils dissolve — that's correct, they're the body of the dish.",
+"Add the grilled chicken and 10 oz spinach. Simmer 5 more minutes. Lime off the heat.",
+"<span class='chill'>Cool, portion six.</span> Thickens dramatically in the fridge — add water at reheat."],
+mac:[["1 serving dal",525,47],["½ cup basmati",105,2],["Extra spinach or vegetable",35,2],["Lime + cilantro finish",25,0]],
+fin:["Lime + cilantro","Greek yogurt","Chili crisp","Mango chutney, 1 tsp","Fried shallot","Extra garam masala"],
+note:["16 g fiber per serving and it costs almost nothing — red lentils are the cheapest protein and fiber in the manual.","warm|Bloom the spices in oil. Dumping dry spice into liquid is the single most common way this goes flat."]},
+
+{n:"Turkey Meatball & Greens Soup",s:"Griddled meatballs, escarole or kale, white beans.",fam:"Italian",k:690,p:53,fz:"Yes",
+tl:{sear:"Roll about 48 one-inch meatballs. Griddle plate on the grates, browned on all sides, 6–8 min. They finish in the soup.",pot:"Onion, carrot and celery 8 min, then 3 qt stock and two cans of cannellini. Purée one cup and return it for body.",simmer:25,finish:"Meatballs simmered to 165°F, greens in the last 5 min, lemon off the heat."},
+shop:[["MEAT","Ground turkey, 93/7","2.5 lb"],["PRODUCE","Escarole or lacinato kale","2 bunches"],["PRODUCE","Carrots","1 lb"],["PRODUCE","Celery","1 bunch"],["PRODUCE","Yellow onion","2"],["PRODUCE","Garlic","1 head"],["PRODUCE","Lemons","3"],["PRODUCE","Flat-leaf parsley","1 bunch"],["DAIRY","Parmesan, wedge","4 oz"],["PANTRY","Cannellini beans","2 cans"],["PANTRY","Chicken stock","3 qt"],["PANTRY","Fennel seed, red pepper flake","—"]],
+steps:["Meatballs: 2.5 lb ground turkey, 1 egg, ½ cup grated parmesan, ½ cup chopped parsley, 4 cloves garlic, 1 tbsp crushed fennel seed, 1 tsp red pepper flake, 2 tsp salt. <span class='chill'>Chill 20 min</span> before rolling.",
+"Roll into 1-inch balls — roughly 48. <b>Griddle plate on the grill</b>, browned on all sides, 6–8 min.",
+"Dutch oven: onion, carrot, celery, 8 min. Add garlic and 3 qt stock.",
+"Add 2 drained cans cannellini. <b>Purée one cup and return it</b> for body.",
+"Add the meatballs, simmer <span class='temp'>20 minutes</span> to <span class='temp'>165°F</span> internal — ground poultry, so 165, not 157.",
+"Add 2 bunches chopped escarole or kale in the last 5 minutes. Lemon off the heat.",
+"<span class='chill'>Cool, portion six</span> — roughly 8 meatballs each. Three fridge, three freezer."],
+mac:[["1 serving, ~8 meatballs + beans",520,49],["Side vegetable or bread",95,3],["Parmesan + lemon finish",75,1]],
+fin:["Parmesan + lemon","Cracked pepper + olive oil","Chili crisp","Pesto, 1 tsp stirred in","Extra parmesan","Red pepper flake"],
+note:["Drop a parmesan rind into the pot while it simmers. Free umami, and it's the difference between broth and stock.","warm|165°F for the meatballs. The 157 rule applies to whole muscle only."]},
+
+{n:"Cajun Chicken & Sausage",s:"Grilled thighs and andouille, the trinity, tomato.",fam:"Louisiana",k:700,p:54,fz:"Yes",
+tl:{sear:"Grill thighs to 157°F and sausage to 165°F, then direct to blister. Chunk the chicken, slice the sausage.",pot:"The trinity — 3 onions, 4 peppers, 1 bunch celery — cooked 12 min until collapsed, then spices, tomatoes and 2 qt stock.",simmer:45,finish:"Grilled chicken and sausage in for the last 25 min. Scallions and parsley off the heat."},
+shop:[["MEAT","Boneless skinless chicken thighs","2.5 lb"],["MEAT","Andouille or smoked chicken sausage","1 lb"],["PRODUCE","Bell peppers","4"],["PRODUCE","Celery","1 bunch"],["PRODUCE","Yellow onion","3"],["PRODUCE","Garlic","1 head"],["PRODUCE","Scallions","1 bunch"],["PRODUCE","Flat-leaf parsley","1 bunch"],["PANTRY","Diced tomatoes","28 oz can"],["PANTRY","Chicken stock","2 qt"],["PANTRY","Smoked paprika, cayenne, thyme, oregano, bay leaf","—"],["PANTRY","Long-grain rice","1 cup dry"]],
+steps:["Grill the thighs and sausage together — thighs direct 4 min per side then indirect to <span class='temp'>157°F</span>; sausage over indirect to <span class='temp'>165°F</span>, then direct to blister.",
+"Chunk the chicken, slice the sausage into coins.",
+"The trinity: 3 onions, 4 peppers, 1 bunch celery, all diced, into a Dutch oven with 1 tbsp oil. <b>12 minutes</b>, until they collapse.",
+"Add garlic, 1 tbsp smoked paprika, 2 tsp thyme, 2 tsp oregano, ½–1 tsp cayenne, bay leaf.",
+"Add diced tomatoes and 2 qt stock. Simmer 20 min.",
+"Add the grilled chicken and sausage. Simmer <span class='temp'>25 more minutes</span>. Scallions and parsley off the heat.",
+"<span class='chill'>Cool, portion six.</span> Rice on the side, <span class='chill'>cooled on a sheet pan.</span>"],
+mac:[["1 serving",495,50],["½ cup long-grain rice",103,2],["Side vegetable",60,2],["Scallion + hot sauce finish",42,0]],
+fin:["Hot sauce + scallion","Filé or extra thyme","Pickled okra","Lemon","Chili crisp","Extra cayenne"],
+note:["Andouille is the sodium and fat here. A smoked chicken sausage saves roughly 90 kcal per serving and most of the flavor survives.","warm|Cayenne varies wildly by jar. Start at half a teaspoon across six servings and finish at the table."]},
+
+{n:"Goan Fish Curry",s:"Coconut-tamarind base, cod or bass, curry leaves and mustard seed.",fam:"Goan",k:690,p:55,fz:"Base only",
+tl:{sear:"No grill sear — the fish goes in raw at the end. Char 2 halved onions on the grates for the base if the grill is already lit.",pot:"Mustard seed popped in oil, onions, ginger-garlic, dry spices bloomed, then coconut milk, tamarind and stock. <b>Build the base first and taste it before the fish goes anywhere near it.</b>",simmer:30,finish:"Fish added in the last 8 minutes only, poached gently until it just flakes. Do not stir hard or it shreds."},
+shop:[["MEAT","Cod, striped bass or halibut fillets","3.25 lb"],["PRODUCE","Yellow onion","3"],["PRODUCE","Ginger","3 in"],["PRODUCE","Garlic","1 head"],["PRODUCE","Cilantro","2 bunches"],["PRODUCE","Limes","4"],["PRODUCE","Serrano or green chile","3"],["PANTRY","Light coconut milk","3 cans"],["PANTRY","Tamarind paste","1 jar"],["PANTRY","Kashmiri chili powder, turmeric, coriander, cumin, mustard seed","—"],["PANTRY","Fish or chicken stock","1 qt"],["PANTRY","Basmati rice","1 cup dry"]],
+steps:["<b>Build the base completely before the fish appears.</b> This is the only way a fish dinner survives six days, and it changes how you cook it.",
+"Dutch oven: 1 tbsp oil, 1 tsp mustard seed until they pop. Add 3 chopped onions, 10 min.",
+"Add 2 tbsp grated ginger, 6 cloves garlic, 3 chopped serranos, 1 tbsp Kashmiri chili powder, 2 tsp turmeric, 1 tbsp coriander, 2 tsp cumin. <b>Bloom 60 seconds in the oil.</b>",
+"Add 3 cans light coconut milk, 1 cup stock, 2 tbsp tamarind paste, 2 tsp salt. Simmer <span class='temp'>25 minutes</span> and taste it. The base should be sour, hot and salty on its own.",
+"Cut the fish into 2-inch chunks. Slide them in, <b>lower the heat to a bare tremble, 8 minutes.</b> Do not stir — push them under with the back of a spoon. Boiling shreds the fish.",
+"<span class='chill'>Cool, portion six.</span> Rice on the side, <span class='chill'>cooled on a sheet pan.</span>",
+"<b>Reheat gently — 60% power, 2 minutes, stirred once.</b> Microwaving this on high turns cod into rubber."],
+mac:[["1 serving curry with fish",429,50],["¾ cup basmati",158,3],["Side vegetable",60,2],["Lime + cilantro finish",43,0]],
+fin:["Lime + cilantro","Extra tamarind","Chili crisp","Green chile, sliced raw","Coconut, toasted","Yogurt, a spoon"],
+note:["warm|<b>Gentle reheat only.</b> This and the other two fish dinners are the only recipes here you cannot microwave on high. 60% power, stir once, stop while it's still just warm.","<b>Freeze the base, not the fish.</b> If you want three in the freezer, hold back a third of the base before the fish goes in, freeze that, and poach fresh fish into it on the night. Thawed poached cod is poor."]},
+
+{n:"Salmon & Corn Chowder",s:"Potato-thickened, no cream, salmon flaked through at the end.",fam:"New England",k:691,p:50,fz:"Yes",
+tl:{sear:"Grill the salmon skin-side down over direct, lid closed, 8 min. It only needs to be 80% done — it finishes in the pot.",pot:"Onion, celery and potato softened, then stock and corn. Purée two cups and return it — that's the body, no cream needed.",simmer:35,finish:"Salmon flaked in during the last 5 minutes, off direct heat. Dill and lemon at the end."},
+shop:[["MEAT","Salmon fillets, skin on","3 lb"],["PRODUCE","Yukon gold potatoes","2 lb"],["PRODUCE","Corn on the cob","6 ears"],["PRODUCE","Celery","1 bunch"],["PRODUCE","Yellow onion","3"],["PRODUCE","Fresh dill","1 bunch"],["PRODUCE","Lemons","4"],["DAIRY","2% milk","1 qt"],["PANTRY","Fish or chicken stock","2 qt"],["PANTRY","Bay leaf, thyme, Old Bay","—"]],
+steps:["Grill the salmon skin-side down over direct heat, lid closed, 8 min. <b>Stop at about 80% done</b> — it finishes in the chowder and overcooked salmon in soup is grim. Skin peels off and gets discarded.",
+"Corn straight on the grates until charred, 8 min. Cut the kernels off; <b>keep the stripped cobs.</b>",
+"Dutch oven: onion and celery 8 min. Add 2 lb diced potato, 2 qt stock, bay leaf, thyme, <b>and the bare corn cobs</b> — they carry more corn flavor than the kernels.",
+"Simmer <span class='temp'>25 minutes</span> until the potatoes are soft. <b>Fish the cobs out and throw them away.</b>",
+"<b>Purée two cups of the soup and stir it back in.</b> That's your thickener. No cream, no flour, no roux — this is what keeps the dish at 601 kcal instead of 850.",
+"Add 1 qt 2% milk and the charred corn. Warm through — <b>do not boil after the milk goes in</b> or it will break.",
+"Flake the salmon in, off the heat, in the last 5 minutes. Dill and lemon at the end. <span class='chill'>Cool, portion six.</span>"],
+mac:[["1 serving with 6 oz salmon",601,49],["Side vegetable or bread",90,1],["Dill + lemon finish",0,0]],
+fin:["Dill + lemon","Old Bay + cracked pepper","Hot sauce","Crumbled bacon, 1 slice","Chives + black pepper","Lemon zest and olive oil"],
+note:["warm|<b>Gentle reheat only.</b> 60% power, stir once. Milk-based soups split and salmon toughens if you push them.","Salmon in a chowder holds far better than a salmon fillet does — it's already flaked, the liquid protects it, and it's the only way salmon works as a reheated dinner in this system."]},
+
+{n:"Cioppino",s:"Tomato-fennel-wine broth, white fish and shrimp, built as a base that takes seafood late.",fam:"Italian-American",k:691,p:56,fz:"Base only",
+tl:{sear:"No grill sear. Char 2 halved fennel bulbs and 2 onions on the grates for the base if the grill is already lit.",pot:"Fennel, onion and garlic softened, then wine reduced, tomatoes and stock in. <b>The base is the dish — build and taste it before any seafood appears.</b>",simmer:40,finish:"Fish added for the last 8 minutes, shrimp for the last 4. Both stop the moment they turn opaque."},
+shop:[["MEAT","Cod, halibut or striped bass fillets","2 lb"],["MEAT","Raw shrimp, peeled","1.5 lb"],["PRODUCE","Fennel bulbs","2"],["PRODUCE","Yellow onion","2"],["PRODUCE","Garlic","2 heads"],["PRODUCE","Flat-leaf parsley","2 bunches"],["PRODUCE","Lemons","4"],["PANTRY","Crushed tomatoes","28 oz can"],["PANTRY","Diced tomatoes","28 oz can"],["PANTRY","Dry white wine","1 cup"],["PANTRY","Fish or chicken stock","2 qt"],["PANTRY","Red pepper flake, oregano, bay leaf, saffron (optional)","—"],["PANTRY","Jasmine rice or crusty bread","1 cup dry"]],
+steps:["<b>The base is the whole dish.</b> Seafood goes in at the very end and only just cooks — that's the technique, and it's also what makes this survive the week.",
+"Dutch oven: 2 sliced fennel bulbs and 2 onions in oil, 12 min until soft. Add 8 cloves garlic, 1 tsp red pepper flake, 1 tbsp oregano.",
+"Add 1 cup white wine and <b>reduce it by half</b>, 5 min. Skipping this leaves a raw alcohol edge that never cooks out.",
+"Add both cans of tomatoes, 2 qt stock, bay leaf, saffron if you have it, 2 tsp salt. Simmer <span class='temp'>30 minutes</span> and taste. It should be bright, a little sweet and clearly fennel-forward.",
+"Cut the fish into 2-inch chunks. In for <b>8 minutes at a bare tremble.</b> Shrimp in for the <b>last 4 minutes only</b> — they go from perfect to rubber in about 60 seconds.",
+"Parsley and lemon off the heat. <span class='chill'>Cool, portion six.</span>",
+"<b>Reheat gently — 60% power, 2 minutes.</b> Rice or bread on the side."],
+mac:[["Cod, 4 oz",119,26],["Shrimp, 3 oz",84,20],["Tomato-fennel broth",200,5],["¾ cup rice or bread",158,3],["Side vegetable + olive oil",130,2]],
+fin:["Parsley + lemon","Red pepper flake + olive oil","Garlic aioli, thin","Extra fennel fronds","Chili crisp","Lemon zest and cracked pepper"],
+note:["warm|<b>Gentle reheat only.</b> Shrimp in particular will not forgive a microwave on high — 60% power, and stop while it's just warm.","<b>Freeze the base, not the seafood.</b> Hold back a third of the broth before the fish goes in and freeze that instead. Fresh shrimp takes 4 minutes to drop into a thawed base on the night."]},
+
+{n:"Braised Short Rib",s:"Red wine, seared on the grill, three hours in the oven, skimmed overnight.",fam:"French",k:690,p:53,fz:"Yes",
+tl:{sear:"Sear the short ribs hard on the grill over direct heat, 2 min per side, in batches. They should be genuinely brown.",pot:"Mirepoix, tomato paste, a full bottle of red reduced by half, then stock and the ribs. 300°F, covered.",simmer:180,finish:"Shred off the bone. <b>Refrigerate the whole pot overnight and lift the fat cap off in the morning — this one is not optional.</b>"},
+shop:[["MEAT","Bone-in beef short ribs","6 lb"],["PRODUCE","Carrots","1 lb"],["PRODUCE","Celery","1 bunch"],["PRODUCE","Yellow onion","3"],["PRODUCE","Garlic","2 heads"],["PRODUCE","Thyme","1 bunch"],["PRODUCE","Flat-leaf parsley","1 bunch"],["PANTRY","Dry red wine","1 bottle"],["PANTRY","Beef stock","1 qt"],["PANTRY","Tomato paste","1 small can"],["PANTRY","Bay leaf, black peppercorn","—"],["PANTRY","Polenta or potatoes","1 cup dry / 2 lb"]],
+steps:["Salt the short ribs generously and leave them out 30 min. <b>Sear on the grill over direct heat</b>, 2 min per side, in batches so they brown rather than steam.",
+"Dutch oven: onion, carrot, celery 10 min. Add 3 tbsp tomato paste, cook 2 min until it darkens.",
+"Add the full bottle of red wine and <b>reduce by half</b>, about 12 min. This is not optional — unreduced wine tastes thin and sour after three hours.",
+"Add 1 qt beef stock, thyme, bay, peppercorns, and the ribs. <span class='temp'>300°F, covered, 3 hours</span> until the meat falls off the bone.",
+"Pull the bones out and shred the meat. Discard the bones and any hard gristle.",
+"<span class='chill'>Refrigerate the whole pot overnight. In the morning, lift the solid fat cap off in one piece.</span> <b>Short rib is the fattiest cut in this manual</b> — expect to remove a genuinely startling amount, and expect to remove 200–300 kcal per serving with it.",
+"Portion six over polenta or mashed potato. Three fridge, three freezer, flat."],
+mac:[["5.5 oz shredded short rib, skimmed",390,44],["Red wine braising sauce",60,2],["½ cup polenta or mash",110,3],["Side vegetable",60,2],["Parsley + finish",70,2]],
+fin:["Parsley + lemon zest (gremolata)","Horseradish-yogurt","Cracked pepper + olive oil","Grated parmesan","Sherry vinegar, a splash","Dijon, a smear"],
+note:["warm|<b>The overnight skim is mandatory here, more than anywhere else in the manual.</b> Unskimmed short rib runs 250–300 kcal per serving over target and will quietly erase most of a week's deficit.","6 lb of bone-in short rib yields roughly 2 lb of shredded meat. It looks like far too much at the counter and it isn't. Boneless works too — buy 4 lb."]},
+
+{n:"Beef Barbacoa",s:"Chuck braised in chipotle and adobo, seared on the grill, shredded.",fam:"Mexican",k:690,p:56,fz:"Yes",
+tl:{sear:"Sear the cubed chuck hard on the grill over direct, 2 min per side, in batches. Char 2 halved onions alongside.",pot:"Blended chipotle-adobo-vinegar sauce over the seared beef with stock, bay and clove. 300°F, covered.",simmer:180,finish:"Shred with two forks. <b>Refrigerate overnight and skim the fat cap before portioning.</b>"},
+shop:[["MEAT","Beef chuck roast","4 lb"],["PRODUCE","White onion","3"],["PRODUCE","Garlic","2 heads"],["PRODUCE","Limes","6"],["PRODUCE","Cilantro","2 bunches"],["PRODUCE","Coleslaw mix","1 bag"],["PANTRY","Chipotles in adobo","2 cans"],["PANTRY","Beef or chicken stock","1 qt"],["PANTRY","Apple cider vinegar","—"],["PANTRY","Cumin, Mexican oregano, whole cloves, bay leaf","—"],["PANTRY","Jasmine rice","1 cup dry"],["PANTRY","Black beans","2 cans"]],
+steps:["Trim the chuck of heavy exterior fat, cut into 2-inch cubes, salt generously.",
+"<b>Sear on the grill over direct heat</b>, 2 min per side, in batches. Char 2 halved onions on the same fire.",
+"Blend: 5 chipotles plus 3 tbsp adobo, the charred onion, 8 cloves garlic, ¼ cup cider vinegar, juice of 3 limes, 1 tbsp cumin, 1 tbsp oregano, 4 whole cloves, 2 tsp salt.",
+"Beef, sauce, 1 qt stock and 2 bay leaves into a Dutch oven. <span class='temp'>300°F, covered, 3 hours</span> until it shreds under a fork.",
+"Shred with two forks. <span class='chill'>Refrigerate the whole pot overnight and lift the fat cap off in the morning</span> — worth 150–250 kcal per serving.",
+"Portion six. Rice and a drained can of black beans on the side, <span class='chill'>cooled on a sheet pan.</span>",
+"Slaw stays raw. Dress the morning of."],
+mac:[["5.5 oz shredded barbacoa, skimmed",390,47],["Adobo sauce",40,2],["½ cup rice + black beans",148,7],["Slaw",40,1],["Lime + onion + cilantro finish",72,2]],
+fin:["Lime + raw onion + cilantro","Salsa verde","Greek yogurt","Pickled red onion","Hot sauce + cotija","Chili crisp"],
+note:["Whole cloves are the thing that makes this taste like barbacoa rather than pot roast. Four is enough; six is too many and it goes medicinal.","warm|Skim it. Chuck at 4 lb throws a lot of fat, and the difference between skimmed and unskimmed here is roughly 200 kcal per serving."]},
+
+{n:"Ropa Vieja",s:"Flank steak braised until it shreds, peppers, olives, tomato.",fam:"Cuban",k:690,p:58,fz:"Yes",
+tl:{sear:"Sear the whole flank hard on the grill over direct, 3 min per side. Char the peppers and onions alongside.",pot:"Sofrito of pepper, onion and garlic, then cumin and oregano bloomed, tomatoes, stock, olives and the flank. 300°F, covered.",simmer:150,finish:"Pull the flank out, shred it with two forks along the grain, and return it to the sauce for the last 15 minutes."},
+shop:[["MEAT","Flank steak","3.5 lb"],["PRODUCE","Bell peppers, mixed colors","5"],["PRODUCE","Yellow onion","3"],["PRODUCE","Garlic","2 heads"],["PRODUCE","Cilantro","1 bunch"],["PRODUCE","Limes","4"],["PANTRY","Crushed tomatoes","28 oz can"],["PANTRY","Pimiento-stuffed green olives","1 cup"],["PANTRY","Capers","2 tbsp"],["PANTRY","Beef stock","1 qt"],["PANTRY","Cumin, oregano, bay leaf, smoked paprika","—"],["PANTRY","Jasmine rice","1 cup dry"],["PANTRY","Black beans","2 cans"]],
+steps:["<b>Flank is the one steak that shreds.</b> Braised long enough, the same aggressive grain that makes it chewy when overcooked becomes the thing that pulls apart into strands.",
+"Salt the whole flank and <b>sear it hard on the grill</b>, 3 min per side. Char 3 peppers and 2 halved onions alongside.",
+"Dutch oven: the grilled peppers and onions chopped, plus 8 cloves garlic, 5 min. Add 1 tbsp cumin, 1 tbsp oregano, 2 tsp smoked paprika, bloom 60 seconds.",
+"Add crushed tomatoes, 1 qt beef stock, 1 cup sliced green olives, 2 tbsp capers, 2 bay leaves. Add the seared flank whole.",
+"<span class='temp'>300°F, covered, 2½ hours</span> until a fork twists in it without resistance.",
+"Pull the flank out and shred with two forks — <b>along the grain, not against it.</b> This is the one time you want to follow the grain. Return it to the sauce for 15 min.",
+"<span class='chill'>Cool, portion six.</span> Rice and black beans on the side."],
+mac:[["6 oz shredded flank",374,51],["Pepper-tomato-olive sauce",110,3],["½ cup rice",105,2],["Black beans, ¼ cup",57,4],["Lime + cilantro finish",44,0]],
+fin:["Lime + cilantro","Hot sauce","Pickled red onion","Extra olives + capers","Greek yogurt","Chili crisp"],
+note:["Flank barely needs skimming — it's lean enough that the overnight fat cap is thin. That makes it the easiest of the three beef braises to hit on macros.","warm|Shred <b>along</b> the grain here, the opposite of every other beef instruction in this manual. Braised flank wants to come apart in long strands."]},
+
+{n:"Carnitas",s:"Pork shoulder braised in its own fat and orange, then crisped on the griddle. Better on day four than day one.",fam:"Mexican",k:695,p:60,fz:"Yes",
+tl:{sear:"No sear needed — carnitas builds its crust at the end, not the start. Trim the shoulder hard and cut into 3-inch chunks.",pot:"Pork, orange, onion, garlic, bay, cumin and just enough stock to come halfway up. 300°F, covered.",simmer:180,finish:"Shred coarsely. <b>Refrigerate overnight and skim the fat cap.</b> Then crisp each portion on the griddle plate at reheat — that's the whole point of the dish."},
+shop:[["MEAT","Boneless pork shoulder (Boston butt)","4.5 lb"],["PRODUCE","Oranges","3"],["PRODUCE","White onion","3"],["PRODUCE","Garlic","2 heads"],["PRODUCE","Limes","8"],["PRODUCE","Cilantro","3 bunches"],["PRODUCE","Tomatillos","1.5 lb"],["PRODUCE","Jalapeños","2"],["PANTRY","Corn tortillas, street size (4.5 in)","24"],["PANTRY","Black beans","2 cans"],["PANTRY","Chicken stock","1 qt"],["PANTRY","Cumin, Mexican oregano, bay leaf, cinnamon stick","—"]],
+steps:["<b>Trim the fat cap hard.</b> Traditional carnitas confits in lard; this version braises and crisps instead, which gets you the same texture for several hundred fewer calories.",
+"Cut into 3-inch chunks, salt generously. Into a Dutch oven with 3 halved oranges (squeeze then drop the whole thing in), 3 quartered onions, 2 heads of garlic halved crosswise, 2 bay leaves, 1 tbsp cumin, 1 tbsp oregano, 1 cinnamon stick.",
+"Add stock until it comes <b>halfway up the meat, no further.</b> This is a braise, not a boil — too much liquid and you get pulled pork, not carnitas.",
+"<span class='temp'>300°F, covered, 3 hours</span> until it collapses under a fork.",
+"Shred coarsely — <b>leave some chunks intact.</b> Uniformly shredded carnitas has nothing to crisp.",
+"<span class='chill'>Refrigerate the whole pot overnight and lift the fat cap off in the morning.</span> Then portion six.",
+"<b>The crisping is the dish, and it happens at reheat.</b> Griddle plate or a dry skillet, one portion, 4 minutes over high heat until the edges go brown and crunchy. Squeeze lime over it. This is the one recipe here that is genuinely better on Thursday than Sunday."],
+mac:[["5.5 oz carnitas, skimmed and crisped",406,44],["4 street corn tortillas",120,5],["Black beans, ½ cup",114,8],["Salsa verde",40,2],["Onion-cilantro + lime",15,1]],
+fin:["Salsa verde + onion-cilantro","Lime and salt only","Pickled red onion","Salsa roja","Chipotle crema","Hot sauce + cotija"],
+note:["<b>Four minutes of crisping turns this from good to the best thing in the manual.</b> Don't skip it and don't microwave it soft — the whole design of the recipe is that the texture is built on the night, not on Sunday.","warm|Skim it. Shoulder at 4.5 lb throws a genuinely startling amount of fat, and skimming is worth 150–250 kcal per serving."]},
+
+{n:"Birria de Res",s:"Chuck in a dried-chile broth, with consommé for dipping. Quesabirria at home on the griddle.",fam:"Mexican",k:685,p:61,fz:"Yes",
+tl:{sear:"Sear the cubed chuck hard on the grill over direct, 2 min per side, in batches. Toast the dried chiles on the griddle plate, 30 sec per side.",pot:"Blended chile-tomato-vinegar adobo over the seared beef with stock, bay, clove and cinnamon. 300°F, covered.",simmer:180,finish:"Shred the meat. <b>Reserve the broth separately as consommé</b> — it's half the dish. Skim both overnight."},
+shop:[["MEAT","Beef chuck roast","4 lb"],["PRODUCE","White onion","3"],["PRODUCE","Roma tomatoes","6"],["PRODUCE","Garlic","2 heads"],["PRODUCE","Limes","8"],["PRODUCE","Cilantro","3 bunches"],["DAIRY","Oaxaca or low-moisture mozzarella","8 oz"],["PANTRY","Guajillo chiles, dried","8"],["PANTRY","Ancho chiles, dried","3"],["PANTRY","Chiles de árbol, dried","2"],["PANTRY","Corn tortillas, street size (4.5 in)","18"],["PANTRY","Beef stock","2 qt"],["PANTRY","Cider vinegar, cumin, oregano, whole cloves, cinnamon stick","—"]],
+steps:["<b>Toast the dried chiles first</b> — griddle plate or dry skillet, 30 seconds per side until they smell nutty. Stem and seed them, then soak in hot water 20 min. Burnt chiles turn the whole pot bitter, so watch them.",
+"Trim the chuck, cut into 2-inch cubes, salt. <b>Sear hard on the grill over direct heat</b>, 2 min per side, in batches.",
+"Blend the soaked chiles with 6 romas, 1 onion, 8 cloves garlic, ¼ cup cider vinegar, 1 tbsp cumin, 1 tbsp oregano, 4 whole cloves, 1 cinnamon stick's worth of ground cinnamon, 2 tsp salt. <b>Strain it</b> — chile skins never fully break down and they'll make the broth gritty.",
+"Beef, adobo and 2 qt beef stock into a Dutch oven. <span class='temp'>300°F, covered, 3 hours.</span>",
+"Shred the meat. <b>Keep the broth — that's the consommé, and it's half of what makes this birria rather than stew.</b> Portion roughly a cup per serving alongside the meat.",
+"<span class='chill'>Refrigerate meat and broth separately overnight, then skim both.</span>",
+"<b>Quesabirria at home:</b> dip a tortilla in the consommé fat, onto the griddle plate, cheese and meat inside, fold, crisp 2 min per side. Remaining consommé in a cup for dipping."],
+mac:[["5.5 oz shredded birria, skimmed",390,47],["1 cup consommé",60,4],["3 street corn tortillas",156,4],["Oaxaca cheese, ¾ oz",64,5],["Onion-cilantro + lime",15,1]],
+fin:["Consommé + onion-cilantro","Lime and salt","Salsa de árbol","Pickled red onion","Extra cheese, quesabirria style","Chile oil from the consommé"],
+note:["<b>Strain the adobo.</b> It's an extra two minutes and it's the difference between silky consommé and one that feels like it has sand in it.","warm|The cheese is optional and costs 64 kcal. Skip it and you're at 621 — plain birria with consommé is excellent on its own."]},
+
+{n:"Picadillo",s:"Ground beef with potato, olives and raisins, browned on the griddle. Hard shells or soft, your call.",fam:"Cuban",k:687,p:58,fz:"Yes",
+tl:{sear:"Griddle plate on the grates. Brown 2.5 lb ground beef hard, then char onions and peppers on the same surface.",pot:"Everything into the Dutch oven with tomatoes, potato, olives, capers, raisins and stock.",simmer:40,finish:"Simmer until the potato is tender and the liquid has mostly gone. It should be moist, not soupy."},
+shop:[["MEAT","Ground beef, 93/7","2.5 lb"],["PRODUCE","Yukon gold potatoes","1.5 lb"],["PRODUCE","Bell peppers","3"],["PRODUCE","Yellow onion","3"],["PRODUCE","Garlic","1 head"],["PRODUCE","Limes","4"],["PRODUCE","Cilantro","2 bunches"],["PRODUCE","Romaine or green leaf","1 head"],["DAIRY","Cotija cheese","4 oz"],["PANTRY","Diced tomatoes","28 oz can"],["PANTRY","Pimiento-stuffed green olives","1 cup"],["PANTRY","Raisins","½ cup"],["PANTRY","Capers","2 tbsp"],["PANTRY","Corn tortillas, street size (4.5 in)","30"],["PANTRY","Cumin, oregano, smoked paprika, bay leaf","—"]],
+steps:["<b>Griddle plate on the grates.</b> Brown 2.5 lb of ground beef hard, breaking it up but letting it sit long enough to crust. Don't stir it constantly.",
+"Onions and peppers on the same griddle until charred at the edges. Everything into a Dutch oven.",
+"Add diced tomatoes, 1.5 lb diced potato, 1 cup sliced green olives, 2 tbsp capers, ½ cup raisins, 1 tbsp cumin, 1 tbsp oregano, 2 tsp smoked paprika, 2 bay leaves, 1 cup water, 2 tsp salt.",
+"Simmer uncovered <span class='temp'>40 minutes</span> until the potato is tender and most of the liquid is gone. <b>Moist, not soupy</b> — soupy picadillo destroys a tortilla.",
+"<span class='chill'>Cool, portion six.</span> Three fridge, three freezer, flat.",
+"<b>The raisins are not optional and they are not a mistake.</b> They do what the apricots do in the tagine — sweetness against salt from the olives and capers. Leave them out and it tastes flat.",
+"Tortillas in their own bag, warmed at eating time. Works equally well over rice or in lettuce cups if you'd rather skip the shells."],
+mac:[["6 oz picadillo with potato",442,47],["5 street corn tortillas",150,6],["Romaine + lime",25,1],["Cotija, ½ oz",55,3],["Cilantro + onion finish",15,1]],
+fin:["Cotija + lime","Hot sauce","Pickled red onion","Extra olives + capers","Salsa verde","Chili crisp"],
+note:["Cheapest dinner in the manual by a distance, and the only one where the whole thing comes together in about an hour.","warm|93/7 rather than 80/20. The fattier grind adds roughly 180 kcal per serving and the olives and raisins are already carrying the richness."]},
+
+{n:"Lebanese Chicken & Chickpea",s:"Seven-spice braise with lemon and tomato, freekeh, yogurt-tahini.",fam:"Lebanese",k:690,p:59,fz:"Yes",
+tl:{sear:"Grill the thighs to 157°F and chunk them. Char 2 halved onions on the grates alongside.",pot:"Onions softened 12 min, seven-spice and cinnamon bloomed in the oil, then tomatoes, stock, chickpeas and lemon.",simmer:35,finish:"Grilled chicken in for the last 20 min. Lemon and a fistful of parsley off the heat."},
+shop:[["MEAT","Boneless skinless chicken thighs","3.5 lb"],["PRODUCE","Yellow onion","3"],["PRODUCE","Garlic","2 heads"],["PRODUCE","Lemons","6"],["PRODUCE","Flat-leaf parsley","2 bunches"],["PRODUCE","Roma tomatoes","6"],["DAIRY","Nonfat Greek yogurt (extra, for the sauce)","16 oz"],["PANTRY","Chickpeas","3 cans"],["PANTRY","Freekeh, cracked","1¼ cups dry"],["PANTRY","Tahini","1 jar"],["PANTRY","Seven-spice (baharat), cinnamon, allspice, sumac","—"],["PANTRY","Chicken stock","1 qt"],["PANTRY","Pine nuts","½ cup"]],
+steps:["Grill the thighs — direct 4 min per side, indirect, pull at <span class='temp'>157°F</span>. Chunk after resting. The char matters; this is not a poached-chicken dish.",
+"Dutch oven: 3 chopped onions in 1 tbsp olive oil, <b>12 minutes</b> until genuinely soft. Add 8 cloves garlic, 1 tbsp seven-spice, 1 tsp cinnamon, 1 tsp allspice — <b>bloom 60 seconds in the oil.</b>",
+"Add chopped tomatoes, 1 qt stock, 3 drained cans chickpeas, the juice of 3 lemons, 2 tsp salt. Simmer <span class='temp'>15 minutes</span>.",
+"Add the grilled chicken. Simmer <span class='temp'>20 more minutes</span>. Finish with the juice of 2 more lemons and a large handful of chopped parsley, off the heat. <b>It should taste noticeably lemony</b> — that brightness is what carries it through six days.",
+"Freekeh: 1¼ cups cracked freekeh in 3 cups stock, 20–25 min. It's green durum wheat, roasted while young, and it holds texture across the week better than rice or couscous.",
+"<b>Toast the pine nuts in a dry pan</b> and keep them in a separate dry container. In the stew they go soft; on top at the table they're the whole textural point.",
+"Sauce cups: ¾ cup Greek yogurt, 3 tbsp tahini, 1 grated garlic clove, lemon, salt. <span class='chill'>Cool, portion six.</span>"],
+mac:[["5.5 oz braised chicken thigh",326,41],["Chickpeas, ½ cup",134,7],["Braise liquid + tomato",50,2],["½ cup freekeh",110,5],["Yogurt-tahini cup + pine nuts",70,4]],
+fin:["Yogurt-tahini + pine nuts","Lemon + sumac","Toum, 1 tsp","Extra parsley + olive oil","Pomegranate molasses","Aleppo pepper + yogurt"],
+note:["Freekeh runs about 8 g of fiber per cooked cup and has a smoky, almost grassy edge that rice doesn't. Any Middle Eastern grocer stocks the cracked kind; buy that rather than whole, which takes twice as long.","warm|Tahini is 90 kcal a tablespoon. Three tablespoons across six sauce cups is 45 kcal a serving — generous enough to taste, small enough to ignore."]},
+
+{n:"Bamia",s:"Lebanese beef and okra stew, garlic-cilantro, lemon and pomegranate molasses.",fam:"Lebanese",k:690,p:55,fz:"Yes",
+tl:{sear:"Sear the cubed beef hard on the grill over direct, 2 min per side, in batches. <b>Sear the okra dry on the griddle plate too</b> — that's the anti-slime step.",pot:"Beef, tomato, stock, seven-spice and bay into the Dutch oven. Okra goes in later.",simmer:120,finish:"Okra and a garlic-cilantro paste (taqlia) added for the last 25 min. Lemon and pomegranate molasses off the heat."},
+shop:[["MEAT","Beef chuck or stew beef","3.5 lb"],["PRODUCE","Cilantro","3 bunches"],["PRODUCE","Garlic","3 heads"],["PRODUCE","Yellow onion","3"],["PRODUCE","Lemons","5"],["PRODUCE","Roma tomatoes","6"],["FROZEN","Cut okra","2 lb"],["PANTRY","Crushed tomatoes","28 oz can"],["PANTRY","Beef stock","1 qt"],["PANTRY","Pomegranate molasses","1 bottle"],["PANTRY","Seven-spice, allspice, bay leaf","—"],["PANTRY","Basmati rice","1 cup dry"],["PANTRY","Vermicelli, broken","½ cup"]],
+steps:["<b>The okra problem is real and it is solvable.</b> Okra goes slimy when it's cooked wet from raw. Two defences, and use both: sear it dry on the griddle plate first, and finish the stew with plenty of acid.",
+"<b>Buy frozen cut okra, not fresh.</b> Frozen is picked young, already trimmed, and behaves better here than most fresh okra at a Midwest supermarket. Do not thaw it — straight onto a hot dry griddle, 6–8 min until the edges brown.",
+"Trim the beef, cut into 1½-inch cubes, salt. <b>Sear hard on the grill over direct heat</b>, 2 min per side, in batches.",
+"Dutch oven: onions 10 min, then 1 tbsp seven-spice and 1 tsp allspice bloomed. Add crushed tomatoes, chopped romas, 1 qt stock, bay leaves and the seared beef. <span class='temp'>Simmer covered 1 hour 35 minutes.</span>",
+"<b>Taqlia</b> — the finishing paste that defines the dish: 12 cloves garlic and 2 bunches cilantro pounded or blitzed to a rough paste, then fried in 1 tbsp oil for 60 seconds until it smells sharp.",
+"Add the seared okra and the taqlia. Simmer <span class='temp'>25 more minutes</span>. Off the heat, add the juice of 3 lemons and 2 tbsp pomegranate molasses. Taste — it should be sour first, then sweet.",
+"Vermicelli rice on the side, vermicelli toasted deep brown. <span class='chill'>Cool, portion six.</span>"],
+mac:[["5.5 oz braised beef",390,47],["Okra + tomato braise",90,4],["⅔ cup vermicelli rice",140,3],["Lemon + pomegranate finish",30,0],["Side salad",40,1]],
+fin:["Lemon + pomegranate molasses","Toum, 1 tsp","Extra cilantro-garlic","Aleppo pepper","Yogurt","Sumac and olive oil"],
+note:["Okra is nowhere else in this manual and it's worth having — 3 g of fiber per serving, and the texture is completely unlike anything in the other 53 recipes.","warm|Pomegranate molasses is the ingredient to buy from a Middle Eastern grocer rather than a supermarket. The good stuff is pure reduced juice; the supermarket version is often mostly sugar syrup."]},
+
+{n:"Filipino Chicken Adobo",s:"Soy and vinegar braise with bay and peppercorn. Genuinely better on day three.",fam:"Filipino",k:700,p:59,fz:"Yes",
+tl:{sear:"Sear the thighs hard on the griddle plate over direct, 3 min per side. They finish in the braise.",pot:"Soy, cane vinegar, garlic, bay and peppercorns over the seared chicken. <b>Do not stir for the first ten minutes</b> — let the vinegar cook off its raw edge.",simmer:45,finish:"Reduce uncovered the last 15 min until the sauce clings. Soft-boiled eggs added at the end."},
+shop:[["MEAT","Boneless skinless chicken thighs","3.5 lb"],["PRODUCE","Garlic","3 heads"],["PRODUCE","Scallions","1 bunch"],["PRODUCE","Bok choy or green beans","1.5 lb"],["DAIRY","Eggs, large","6 (plus egg-bite dozen)"],["PANTRY","Soy sauce","1 cup"],["PANTRY","Cane or white vinegar","¾ cup"],["PANTRY","Bay leaves, whole black peppercorns","—"],["PANTRY","Brown sugar","1 tbsp"],["PANTRY","Jasmine rice","1½ cups dry"]],
+steps:["<b>This is the best-fitting dinner in the manual.</b> Soy and vinegar are both preservatives — adobo was engineered to keep meat edible in a tropical climate before refrigeration. It is genuinely better on day three than day one, and it freezes without losing anything.",
+"Sear the thighs hard on the griddle plate over direct heat, 3 min per side. They don't need to cook through.",
+"Dutch oven: the seared chicken, 1 cup soy, ¾ cup vinegar, 3 heads of garlic (yes, three — smashed, roughly 30 cloves), 5 bay leaves, 1 tbsp whole peppercorns, 1 tbsp brown sugar, 1 cup water.",
+"<b>Bring to a simmer and do not stir for the first ten minutes.</b> This is the one non-negotiable technique in the dish — stirring early works the raw vinegar into the meat and it stays harsh.",
+"Simmer covered <span class='temp'>30 minutes</span>, then <b>uncover and reduce 15 more</b> until the sauce turns glossy and clings to the chicken rather than pooling.",
+"Soft-boil 6 eggs — 7 minutes, ice bath, peel — and drop them into the braise off the heat. They sit in the liquid and take on colour all week.",
+"<span class='chill'>Cool, portion six</span>, one egg each. Bok choy or green beans and rice on the side. <span class='chill'>Rice cools on a sheet pan.</span>"],
+mac:[["6 oz adobo thigh",355,44],["Reduced adobo sauce",60,3],["¾ cup jasmine rice",158,3],["1 soft-boiled egg",72,6],["Bok choy or green beans",55,3]],
+fin:["Sauce + scallion","Extra vinegar, a splash","Chili crisp","Fried garlic","Black pepper, cracked coarse","Calamansi or lime"],
+note:["Three heads of garlic is not a typo. It goes soft and sweet across 45 minutes and becomes part of the sauce rather than a flavouring in it.","warm|The eggs stay submerged in the braising liquid, which is both traditional and the reason they hold six days where a bare peeled egg wouldn't."]},
+
+{n:"Taiwanese Beef Noodle",s:"Chuck braised in soy, star anise and doubanjiang. Broth freezes flat; noodles cooked fresh in four minutes.",fam:"Taiwanese",k:695,p:60,fz:"Broth only",
+tl:{sear:"Sear the cubed chuck hard on the grill over direct, 2 min per side, in batches. Char 2 halved onions and a knob of ginger alongside.",pot:"Doubanjiang fried in oil, then soy, rock sugar, star anise, cinnamon and stock over the seared beef. 300°F, covered.",simmer:150,finish:"Skim overnight. <b>Noodles are cooked fresh on the night, never stored in the broth.</b>"},
+shop:[["MEAT","Beef chuck or beef shank","4 lb"],["PRODUCE","Yellow onion","3"],["PRODUCE","Ginger","4 in"],["PRODUCE","Garlic","1 head"],["PRODUCE","Scallions","2 bunches"],["PRODUCE","Bok choy","2 lb"],["PRODUCE","Roma tomatoes","4"],["PANTRY","Doubanjiang (spicy broad bean paste)","1 jar"],["PANTRY","Soy sauce, dark soy sauce","—"],["PANTRY","Shaoxing wine","1 bottle"],["PANTRY","Star anise, cassia/cinnamon stick, Sichuan peppercorn, rock sugar","—"],["PANTRY","Wheat noodles (knife-cut or ramen-style)","1.5 lb dry"],["PANTRY","Pickled mustard greens","1 jar"],["PANTRY","Beef stock","2 qt"]],
+steps:["Trim the chuck, cut into 2-inch cubes, salt. <b>Sear hard on the grill over direct heat</b>, 2 min per side, in batches. Char 2 halved onions and a thick slab of ginger alongside.",
+"Dutch oven: <b>fry 3 tbsp doubanjiang in 1 tbsp oil for 2 minutes</b> until the oil turns red and it smells sharp. Same principle as the Thai curry paste — unfried, it tastes raw and flat.",
+"Add ½ cup Shaoxing wine and reduce 3 min. Then ¾ cup soy, 2 tbsp dark soy, 2 qt beef stock, 4 chopped tomatoes, 4 star anise, 1 cassia stick, 1 tsp Sichuan peppercorn, 2 tbsp rock sugar, the charred onion and ginger, and the beef.",
+"<span class='temp'>300°F, covered, 2½ hours</span> until the beef gives completely.",
+"<span class='chill'>Refrigerate the whole pot overnight and skim the fat cap.</span> Fish out the star anise and cassia — left in, they go medicinal by day four.",
+"<b>Portion the broth and beef only. Noodles are never stored in it.</b> Wheat noodles in broth turn to mush inside a day — that's not a preference, it's what starch does in hot liquid.",
+"<b>On the night:</b> boil 4 oz of noodles for 4 minutes, drop bok choy in for the last 60 seconds, drain, and pour the reheated broth over. Pickled mustard greens and scallion on top."],
+mac:[["5.5 oz braised beef, skimmed",390,47],["Beef broth, 1½ cups",80,4],["1.75 oz wheat noodles, fresh-cooked",175,6],["Bok choy + pickled mustard greens",50,3]],
+fin:["Pickled mustard greens + scallion","Chili oil","Extra doubanjiang","Black vinegar, a splash","Cilantro + white pepper","Sichuan peppercorn oil"],
+note:["<b>Freeze the broth and beef; buy the noodles fresh.</b> Four minutes of boiling on the night is the whole cost, and it's the difference between this dish and a bowl of paste.","warm|Pull the whole spices out after the braise. Star anise keeps extracting in the fridge and by Thursday it tastes like liquorice cough syrup."]},
+
+{n:"Greek Youvetsi",s:"Beef braised with cinnamon and tomato, finished with orzo baked in the sauce.",fam:"Greek",k:690,p:61,fz:"Yes",
+tl:{sear:"Sear the cubed beef hard on the grill over direct, 2 min per side, in batches.",pot:"Onion, garlic, tomato, cinnamon stick, allspice, bay and red wine over the seared beef. 325°F, covered.",simmer:120,finish:"<b>Orzo stirred in for the last 20 minutes only</b>, uncovered, so it cooks in the sauce and absorbs it."},
+shop:[["MEAT","Beef chuck","3.5 lb"],["PRODUCE","Yellow onion","3"],["PRODUCE","Garlic","1 head"],["PRODUCE","Roma tomatoes","6"],["PRODUCE","Flat-leaf parsley","1 bunch"],["PRODUCE","Lemons","3"],["DAIRY","Kefalotyri, myzithra or parmesan","6 oz"],["PANTRY","Crushed tomatoes","28 oz can"],["PANTRY","Orzo","1½ cups dry"],["PANTRY","Dry red wine","1 cup"],["PANTRY","Cinnamon stick, allspice berries, bay leaf, oregano","—"],["PANTRY","Beef stock","1½ qt"]],
+steps:["Trim the beef, cut into 1½-inch cubes, salt. <b>Sear hard on the grill over direct heat</b>, 2 min per side, in batches.",
+"Dutch oven: 3 chopped onions 10 min, then garlic, 1 tbsp oregano, 6 allspice berries, 2 bay leaves and <b>1 whole cinnamon stick</b>. The cinnamon is what makes this Greek rather than Italian — it should be present but not obvious.",
+"Add 1 cup red wine and <b>reduce by half</b>. Then crushed tomatoes, chopped romas, 1½ qt stock, 2 tsp salt, and the beef.",
+"<span class='temp'>325°F, covered, 2 hours</span> until the beef shreds under a fork. Pull the cinnamon stick and bay out.",
+"<b>Stir in 1½ cups dry orzo, uncovered, for the last 20 minutes.</b> It cooks in the braising liquid and absorbs it — that's the dish. There should still be visible sauce when you stop.",
+"Grate the cheese over while it's hot so it melts in. <span class='chill'>Cool, portion six.</span>",
+"<b>Orzo keeps drinking liquid in the fridge.</b> Expect to add ½ cup of stock or water at reheat — same as the barley soup, and it's normal rather than a mistake."],
+mac:[["5.5 oz braised beef",390,47],["Orzo cooked in the sauce",105,4],["Tomato-cinnamon sauce",80,3],["Side vegetable",60,2],["Kefalotyri or parmesan, ½ oz",55,5]],
+fin:["Grated kefalotyri + lemon","Cracked pepper + olive oil","Red wine vinegar, a splash","Extra oregano","Chili flake and oil","Parsley + lemon zest"],
+note:["Highest protein of any dinner here at 61 g. Chuck plus hard cheese plus a starch cooked in beef stock stacks up fast.","warm|Cinnamon in savoury beef reads as warmth, not dessert — one stick across six servings. Two is too many and it tips over."]},
+
+{n:"Pollo al Chilindrón",s:"Spanish braise — chicken, roasted red peppers, smoked paprika, a little jamón.",fam:"Spanish",k:695,p:57,fz:"Yes",
+tl:{sear:"Grill the thighs to 157°F and chunk them. Char 4 red peppers whole on the grates, then steam and peel.",pot:"Onion, jamón or chorizo rendered, then pimentón bloomed off the heat, tomatoes, wine and stock.",simmer:40,finish:"Grilled chicken and peeled peppers in for the last 25 min. Parsley and sherry vinegar off the heat."},
+shop:[["MEAT","Boneless skinless chicken thighs","3.5 lb"],["MEAT","Jamón serrano or Spanish chorizo","4 oz"],["PRODUCE","Red bell peppers","6"],["PRODUCE","Yellow onion","3"],["PRODUCE","Garlic","2 heads"],["PRODUCE","Roma tomatoes","6"],["PRODUCE","Flat-leaf parsley","1 bunch"],["PANTRY","Smoked paprika (pimentón dulce and picante)","—"],["PANTRY","Dry white wine or fino sherry","1 cup"],["PANTRY","Sherry vinegar","1 bottle"],["PANTRY","Chicken stock","1 qt"],["PANTRY","Bay leaf, saffron (optional)","—"],["PANTRY","Long-grain rice or potatoes","1 cup dry / 2 lb"]],
+steps:["<b>Char 4 red peppers whole on the grates</b> until blackened all over, then steam 10 min under foil and peel. Peeled charred pepper is the backbone of this dish and jarred piquillos are the only acceptable shortcut.",
+"Grill the thighs alongside — direct 4 min per side, indirect, pull at <span class='temp'>157°F</span>. Chunk after resting.",
+"Dutch oven: 4 oz diced jamón or chorizo rendered 3 min, then 3 chopped onions in the rendered fat, 10 min. Add 8 cloves garlic.",
+"<b>Take the pot off the heat before adding the pimentón.</b> Smoked paprika scorches at surprisingly low temperatures and burnt pimentón is acrid and unfixable. 2 tbsp dulce, 1 tsp picante, stirred in off-heat, then straight back on.",
+"Add 1 cup white wine or fino, reduce by half. Then chopped tomatoes, 1 qt stock, bay, saffron if you have it, 2 tsp salt. Simmer 15 min.",
+"Add the grilled chicken and the peeled peppers, cut into strips. Simmer <span class='temp'>25 more minutes</span>. Finish with 2 tbsp sherry vinegar and parsley, off the heat.",
+"<span class='chill'>Cool, portion six.</span> Rice or roasted potatoes on the side."],
+mac:[["6 oz braised thigh",355,44],["Pepper-tomato-pimentón sauce",130,6],["½ cup rice or potatoes",110,3],["Side vegetable",60,2],["Jamón + parsley finish",40,2]],
+fin:["Sherry vinegar + parsley","Extra pimentón picante","Garlic aioli, thin","Lemon","Chili crisp","Olive oil and flaky salt"],
+note:["Four ounces of jamón across six servings is about 40 kcal each and it does the work of twice as much chorizo. This is one place where a small amount of an expensive ingredient is the efficient choice.","warm|Off the heat for the pimentón. It's the single most common way Spanish braises go wrong and there is no recovering from burnt paprika."]}
+];
+
+/* protein type and reheat mode, keyed by recipe name */
+const META={
+"Chicken Shawarma":["Chicken","Microwave"],"Gochujang Chicken":["Chicken","Microwave"],
+"Chile-Lime Chicken":["Chicken","Microwave"],"Cold Salmon Mediterranean":["Fish","Cold — never heat"],
+"Pork Tenderloin Pesto":["Pork","Microwave"],"Teriyaki Chicken":["Chicken","Microwave"],
+"Greek Kofta Skewers":["Chicken","Microwave"],"Jerk Chicken":["Chicken","Microwave"],
+"Flank Steak Chimichurri":["Beef","Room temp — never heat"],"Harissa Chicken & Chickpeas":["Chicken","Microwave"],
+"Miso-Ginger Salmon":["Fish","Cold — never heat"],"Al Pastor Pork":["Pork","Microwave"],
+"Grilled Tuna Niçoise":["Fish","Cold — never heat"],"Blackened Tuna Bowl":["Fish","Cold — never heat"],
+"Turkish Grilled Bass":["Fish","Cold — never heat"],"Tuna & White Bean Salad":["Fish","Cold — no cook at all"],
+"Santa Maria Tri-Tip":["Beef","Room temp — never heat"],"Thai Grilled Beef Salad":["Beef","Cold — never heat"],
+"Turkey Chili":["Turkey","Microwave"],"Chicken Tinga":["Chicken","Microwave"],
+"Thai Red Curry":["Chicken","Microwave"],"Beef & Barley Soup":["Beef","Microwave"],
+"Lentil & Sausage Stew":["Chicken","Microwave"],"Pork Shoulder Salsa Verde":["Pork","Microwave"],
+"Chicken Cacciatore":["Chicken","Microwave"],"Moroccan Chicken Tagine":["Chicken","Microwave"],
+"White Chicken Chili":["Chicken","Microwave"],"Coconut Chicken Dal":["Chicken","Microwave"],
+"Turkey Meatball & Greens Soup":["Turkey","Microwave"],"Cajun Chicken & Sausage":["Chicken","Microwave"],
+"Goan Fish Curry":["Fish","Gentle — 60% power"],"Salmon & Corn Chowder":["Fish","Gentle — 60% power"],
+"Cioppino":["Fish","Gentle — 60% power"],"Braised Short Rib":["Beef","Microwave"],
+"Beef Barbacoa":["Beef","Microwave"],"Ropa Vieja":["Beef","Microwave"],
+"Baja Fish Tostadas":["Fish","Cold — never heat"],"Carne Asada Tacos":["Beef","Room temp — never heat"],
+"Pollo Asado Tacos":["Chicken","Microwave"],"Carnitas":["Pork","Crisp on a griddle"],
+"Birria de Res":["Beef","Microwave"],"Picadillo":["Beef","Microwave"],
+"Djaj Mishwi":["Chicken","Microwave"],"Lebanese Kafta":["Beef","Microwave"],
+"Bún Chả":["Pork","Room temp — never heat"],"Char Siu Pork":["Pork","Microwave"],
+"Piri-Piri Chicken":["Chicken","Microwave"],"Carolina Vinegar BBQ Chicken":["Chicken","Microwave"],
+"Lebanese Chicken & Chickpea":["Chicken","Microwave"],"Bamia":["Beef","Microwave"],
+"Filipino Chicken Adobo":["Chicken","Microwave"],"Taiwanese Beef Noodle":["Beef","Broth only — noodles fresh"],
+"Greek Youvetsi":["Beef","Microwave"],"Pollo al Chilindrón":["Chicken","Microwave"]
+};
+/* regional clusters — the pairing warning fires on these, not just literal family labels */
+const REGION={
+"Mexican":"Latin","Baja":"Latin","Cuban":"Latin","Californian":"Latin","Southwestern":"Latin","Argentine":"Latin","Caribbean":"Latin",
+"Korean":"East Asian","Japanese":"East Asian","Chinese":"East Asian","Taiwanese":"East Asian",
+"Thai":"SE Asian","Vietnamese":"SE Asian","Filipino":"SE Asian",
+"Indian":"South Asian","Goan":"South Asian",
+"Middle Eastern":"Med / Middle East","Greek":"Med / Middle East","Turkish":"Med / Middle East","Mediterranean":"Med / Middle East","North African":"Med / Middle East","Lebanese":"Med / Middle East",
+"Italian":"European","Tuscan":"European","Italian-American":"European","French":"European","Rustic European":"European","Portuguese":"European","Spanish":"European",
+"American":"US","New England":"US","Louisiana":"US","Cajun":"US","Carolina":"US"
+};
+const reg=r=>REGION[r.fam]||"Other";
+/* dishes that work as tacos, tostadas or lettuce cups */
+const TACO=new Set(["Chile-Lime Chicken","Al Pastor Pork","Baja Fish Tostadas","Carne Asada Tacos","Pollo Asado Tacos",
+"Chicken Tinga","Pork Shoulder Salsa Verde","Beef Barbacoa","Ropa Vieja","Carnitas","Birria de Res","Picadillo"]);
+const pr=r=>(META[r.n]||["—","—"])[0];
+const rh=r=>(META[r.n]||["—","—"])[1];
+
+const CATORD=["MEAT","PRODUCE","DAIRY","FROZEN","PANTRY","COSTCO","EQUIPMENT"];
+const DAYS=["Mon","Tue","Wed","Thu","Fri","Sat"];
+let iL=null,iD=null;
+const F={L:{pr:'All',rg:'All'},D:{pr:'All',rg:'All'}};
+
+const PROTS=['All','Chicken','Beef','Fish','Pork','Turkey','Tacos'];
+function tile(r,i,t){
+  const cold=rh(r).indexOf('Microwave')<0;
+  const tag=TACO.has(r.n)?' · <span style="color:#B35A00">TACOS</span>':'';
+  return `<button class="tile" data-t="${t}" data-i="${i}" data-pr="${pr(r)}" data-rg="${reg(r)}" data-taco="${TACO.has(r.n)}" aria-pressed="false">
+    <span class="tid">${t}${String(i+1).padStart(2,'0')} · ${pr(r)} · ${r.fam}${tag}</span>
+    <span class="tn">${r.n}</span>
+    <span class="ts">${r.s}</span>
+    <span class="tm"><span>${r.k} kcal</span><span>${r.p} g</span><span class="${cold?'fzn':''}">${rh(r)}</span></span>
+  </button>`;
+}
+const REGS=['All','Latin','Med / Middle East','European','US','East Asian','SE Asian','South Asian'];
+function filterBar(t){
+  const a=PROTS.map(p=>`<button class="filt" data-ft="${t}" data-fd="pr" data-fv="${p}" aria-pressed="${p==='All'}">${p}</button>`).join('');
+  const b=REGS.map(p=>`<button class="filt reg" data-ft="${t}" data-fd="rg" data-fv="${p}" aria-pressed="${p==='All'}">${p}</button>`).join('');
+  return `<div class="frow">${a}</div><div class="frow">${b}</div>`;
+}
+function renderTiles(){
+  document.getElementById('filtL').innerHTML=filterBar('L');
+  document.getElementById('filtD').innerHTML=filterBar('D');
+  document.getElementById('tilesL').innerHTML=L.map((r,i)=>tile(r,i,'L')).join('');
+  document.getElementById('tilesD').innerHTML=D.map((r,i)=>tile(r,i,'D')).join('');
+  wireTiles(); applyFilter('L'); applyFilter('D');
+}
+function applyFilter(t){
+  const f=F[t]; let shown=0;
+  document.querySelectorAll('.tile[data-t="'+t+'"]').forEach(x=>{
+    const okP = f.pr==='All' ? true : (f.pr==='Tacos' ? x.dataset.taco==='true' : x.dataset.pr===f.pr);
+    const okR = f.rg==='All' || x.dataset.rg===f.rg;
+    const ok = okP && okR;
+    x.style.display=ok?'block':'none'; if(ok)shown++;});
+  document.querySelectorAll('.filt[data-ft="'+t+'"]').forEach(b=>
+    b.setAttribute('aria-pressed',String(b.dataset.fv===f[b.dataset.fd])));
+  const cnt=document.getElementById('cnt'+t); if(cnt)cnt.textContent=shown+' shown';
+  const sel=t==='L'?iL:iD;
+  if(sel!==null){const el=document.querySelector('.tile[data-t="'+t+'"][data-i="'+sel+'"]');if(el)el.setAttribute('aria-pressed','true')}
+}
+document.getElementById('rulesBox').innerHTML=RULES.map(r=>
+ `<div class="rule-item"><span class="tag ${r[0]}">${r[0]==='h'?'Heat':'Cold'}</span><p><strong>${r[1]}</strong> ${r[2]}</p></div>`).join('');
+
+function specStrip(r,t){
+  const cold=rh(r).indexOf('Microwave')<0;
+  return `<div class="spec">
+    <div><div class="k">Yield</div><div class="v">6 servings</div></div>
+    <div><div class="k">Per serving</div><div class="v hot">${r.k} kcal</div></div>
+    <div><div class="k">Protein</div><div class="v hot">${r.p} g</div></div>
+    <div><div class="k">Reheat</div><div class="v ${cold?'cold':''}">${rh(r)}</div></div>
+    <div><div class="k">Freezes</div><div class="v cold">${r.fz}</div></div>
+    <div><div class="k">Family</div><div class="v">${pr(r)} · ${r.fam}</div></div></div>`;
+}
+function card(r,i,t){
+  const ing=r.shop.map(s=>`<div class="ing"><span>${s[1]}</span><span class="q">${s[2]}</span></div>`).join('');
+  const steps=r.steps.map(s=>`<li>${s}</li>`).join('');
+  let tk=0,tp=0;r.mac.forEach(m=>{tk+=m[1];tp+=m[2]});
+  const mac=r.mac.map(m=>`<tr><td>${m[0]}</td><td>${m[1]}</td><td>${m[2]} g</td></tr>`).join('')
+    +`<tr class="tot"><td>Total</td><td>${tk}</td><td>${tp} g</td></tr>`;
+  const fin=r.fin.map((f,j)=>`<div class="fin"><span class="d">${DAYS[j]||''}</span><span>${f}</span></div>`).join('');
+  const notes=r.note.map(n=>{const w=n.startsWith('warm|');return `<div class="note${w?' warm':''}">${w?n.slice(5):n}</div>`}).join('');
+  return `<article class="recipe"><div class="r-hd"><span class="r-idx">${t}${String(i+1).padStart(2,'0')}</span>
+    <div><h3 class="r-name">${r.n}</h3><p class="r-sub">${r.s}</p></div></div>
+    ${specStrip(r,t)}
+    <div class="cols"><div class="col"><h4>Ingredients — makes 6</h4>${ing}
+      <h4>Per serving</h4><table class="mac">${mac}</table></div>
+    <div class="col"><h4>Method</h4><ol class="steps">${steps}</ol>
+      <h4>Finish rotation — one sauce cup per day</h4>${fin}${notes}</div></div></article>`;
+}
+document.getElementById('allL').innerHTML=L.map((r,i)=>card(r,i,'L')).join('');
+document.getElementById('allD').innerHTML=D.map((r,i)=>card(r,i,'D')).join('');
+
+function refreshPicks(){
+  document.getElementById('pickL').textContent=iL===null?'— not chosen —':L[iL].n;
+  document.getElementById('pickD').textContent=iD===null?'— not chosen —':D[iD].n;
+  const fn=document.getElementById('famNote');
+  if(iL!==null&&iD!==null){
+    const a=L[iL],b=D[iD];
+    if(a.fam===b.fam){fn.textContent='⚠ Same cuisine both meals — '+a.fam+'. Swap one.';fn.style.color='#F0A868'}
+    else if(reg(a)===reg(b)){fn.textContent='⚠ Both '+reg(a)+' — different labels, similar week. Consider swapping.';fn.style.color='#F0A868'}
+    else{fn.textContent=reg(a)+' / '+reg(b);fn.style.color='#9BA19C'}
+  }else fn.textContent='';
+}
+function wireTiles(){
+  document.querySelectorAll('.tile').forEach(b=>{
+    b.onclick=()=>{
+      const t=b.dataset.t,i=+b.dataset.i;
+      if(t==='L'){iL=(iL===i?null:i)}else{iD=(iD===i?null:i)}
+      document.querySelectorAll('.tile[data-t="'+t+'"]').forEach(x=>x.setAttribute('aria-pressed','false'));
+      const sel=t==='L'?iL:iD;
+      if(sel!==null)document.querySelector('.tile[data-t="'+t+'"][data-i="'+sel+'"]').setAttribute('aria-pressed','true');
+      refreshPicks();buildShop();buildCook();
+    };
+  });
+  document.querySelectorAll('.filt').forEach(b=>{
+    b.onclick=()=>{const t=b.dataset.ft;F[t][b.dataset.fd]=b.dataset.fv;applyFilter(t)};
+  });
+}
+
+function buildShop(){
+  const out=document.getElementById('shopOut');
+  if(iL===null||iD===null){out.innerHTML='<div class="empty">Choose a lunch and a dinner in Step 1 — the list builds itself.</div>';return}
+  const a=L[iL],b=D[iD],merged={};
+  const push=(cat,nm,qt,src)=>{const k=(cat+'|'+nm).toLowerCase();
+    if(merged[k]){merged[k].qt+=' + '+qt;merged[k].src='both'}else merged[k]={cat,nm,qt,src}};
+  FIXED.forEach(f=>push(f.cat,f.nm,f.qt,'daily'));
+  a.shop.forEach(s=>push(s[0],s[1],s[2],'lunch'));
+  b.shop.forEach(s=>push(s[0],s[1],s[2],'dinner'));
+  push('EQUIPMENT','Instant-read thermometer','$15','once');
+  push('EQUIPMENT','Cast-iron griddle plate for the grates','$30\u201340','once');
+  push('EQUIPMENT','6 identical glass containers','—','once');
+  push('EQUIPMENT','2 oz deli cups with lids, 50-pack','—','once');
+  const byCat={};Object.values(merged).forEach(m=>{(byCat[m.cat]=byCat[m.cat]||[]).push(m)});
+  let h='<p class="lede"><b>'+a.n+'</b> × 6 · <b>'+b.n+'</b> × 6 · plus the fixed daily items. Tap to check off.</p>';
+  CATORD.forEach(c=>{if(!byCat[c])return;
+    h+='<div class="catblock"><div class="catname">'+c+'</div>';
+    byCat[c].forEach(m=>{h+='<label class="item"><input type="checkbox"><span class="fr">'+m.src+'</span><span class="nm">'+m.nm+'</span><span class="qt">'+m.qt+'</span></label>'});
+    h+='</div>'});
+  h+='<div class="btnrow no-print"><button class="act" id="prnS">Print list</button><button class="act" id="rst">Reset checks</button></div>';
+  out.innerHTML=h;
+  out.querySelectorAll('.item input').forEach(cb=>cb.addEventListener('change',e=>e.target.closest('.item').classList.toggle('done',e.target.checked)));
+  document.getElementById('rst').onclick=()=>out.querySelectorAll('.item input').forEach(cb=>{cb.checked=false;cb.closest('.item').classList.remove('done')});
+  document.getElementById('prnS').onclick=()=>window.print();
+}
+
+const fmt=m=>Math.floor(m/60)+':'+String(m%60).padStart(2,'0');
+function buildCook(){
+  const out=document.getElementById('cookOut');
+  if(iL===null||iD===null){out.innerHTML='<div class="empty">Choose a lunch and a dinner in Step 1 to generate the Sunday plan.</div>';return}
+  const a=L[iL],b=D[iD],potIn=25,done=potIn+b.tl.simmer;
+  const rows=[
+    ['SAT PM','lnc',a.sat],
+    ['0:00','dnr','Light the grill, two-zone. '+b.tl.sear],
+    [fmt(potIn),'dnr',b.tl.pot+' <b>Unattended from here.</b>'],
+    ['0:30','lnc',a.tl.grill],
+    ['0:45','lnc',a.tl.pull],
+    ['0:50','lnc',a.tl.veg],
+    ['1:00','lnc',a.tl.starch],
+    ['1:20','lnc','<span class="chill">Spread the starch thin on a sheet pan. Fridge inside an hour.</span>'],
+    ['1:35','lnc','Slice the protein against the grain. <b>Portion 6 lunch containers.</b> Sauce cups and cold components separate.'],
+    [fmt(done),'dnr',b.tl.finish+' <span class="chill">Cool, then portion 6 dinners.</span>'],
+    ['END','both','<b>3 lunches + 3 dinners to the fridge. 3 lunches + 3 dinners flat to the freezer.</b> Move the frozen ones down Wednesday night.']
+  ];
+  let h='<p class="lede"><b>'+a.n+'</b> and <b>'+b.n+'</b>. Elapsed ≈ '+fmt(done+20)+', of which roughly 45 minutes is hands-on.</p><table class="tl"><tr><th>Clock</th><th>Dish</th><th>Action</th></tr>';
+  rows.forEach(r=>{h+='<tr class="'+r[1]+'"><td class="clk">'+r[0]+'</td><td class="who">'+(r[1]==='lnc'?'Lunch':r[1]==='dnr'?'Dinner':'Both')+'</td><td>'+r[2]+'</td></tr>'});
+  h+='</table>';
+  h+='<h2 class="sec" style="margin-top:32px">The week</h2><table class="weekmap"><tr><th>Day</th><th>Lunch</th><th>Dinner</th><th>Source</th></tr>';
+  DAYS.forEach((d,i)=>{const fz=i>2;
+    h+='<tr><td><b>'+d+'</b></td><td>'+a.n+'</td><td>'+b.n+'</td><td class="src '+(fz?'freezer':'fridge')+'">'+(fz?'Freezer → moved down Wed night':'Fridge')+'</td></tr>'});
+  h+='<tr><td><b>Sun</b></td><td colspan="2">Flexible — out, with people, or cooked fresh</td><td class="src">Cook day</td></tr></table>';
+  h+='<div class="note"><b>Why half go straight to the freezer</b> — USDA guidance on cooked poultry and ground meat is 3–4 days refrigerated. Six containers cooked Sunday would make Saturday\u2019s day seven. Freeze three of each on Sunday <i>while fresh</i>, not on Wednesday.</div>';
+  h+='<div class="note warm"><b>Building a buffer</b> — scale the pot dish to eight servings, about 30% more protein and one extra can of beans or tomatoes. Eat six, bank two. Three weeks of that and a destroyed Sunday stops mattering.</div>';
+  h+='<h2 class="sec" style="margin-top:32px">Recipes</h2>'+card(a,iL,'L')+card(b,iD,'D');
+  h+='<div class="btnrow no-print"><button class="act" id="prnC">Print this plan</button></div>';
+  out.innerHTML=h;
+  document.getElementById('prnC').onclick=()=>window.print();
+}
+
+function go(p){
+  document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('on',x.id===p));
+  document.querySelectorAll('.step').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.p===p)));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.step').forEach(b=>b.onclick=()=>go(b.dataset.p));
+document.getElementById('toShop').onclick=()=>{buildShop();go('p2')};
+document.getElementById('toCook').onclick=()=>{buildCook();go('p3')};
+
+/* ============================================================
+   PERSISTENCE — localStorage + shareable URL hash
+   Hash wins over saved state, so a link always loads its week.
+   ============================================================ */
+const KEY='wkm.v1';
+function loadState(){
+  try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):{}}catch(e){return {}}
+}
+function saveState(patch){
+  try{
+    const s=Object.assign(loadState(),patch);
+    localStorage.setItem(KEY,JSON.stringify(s));
+  }catch(e){/* private mode or storage full — app still works, just forgets */}
+}
+function pairKey(){return (iL===null?'x':iL)+'_'+(iD===null?'x':iD)}
+
+function writeHash(){
+  if(iL===null||iD===null){history.replaceState(null,'',location.pathname+location.search);return}
+  const h='#L'+String(iL+1).padStart(2,'0')+'-D'+String(iD+1).padStart(2,'0');
+  history.replaceState(null,'',location.pathname+location.search+h);
+}
+function readHash(){
+  const m=(location.hash||'').match(/^#L(\d{1,2})-D(\d{1,2})$/i);
+  if(!m)return false;
+  const a=parseInt(m[1],10)-1,b=parseInt(m[2],10)-1;
+  if(a>=0&&a<L.length&&b>=0&&b<D.length){iL=a;iD=b;return true}
+  return false;
+}
+function updateWeekLabel(){
+  const el=document.getElementById('weekLabel');
+  if(!el)return;
+  el.textContent=(iL===null||iD===null)?'This week'
+    :'This week · L'+String(iL+1).padStart(2,'0')+' + D'+String(iD+1).padStart(2,'0');
+}
+function persistPicks(){
+  saveState({iL:iL,iD:iD,fL:F.L,fD:F.D});
+  writeHash();updateWeekLabel();
+}
+
+/* checked shopping items, scoped to the current pairing so a new week starts clean */
+function loadChecks(){const s=loadState();return (s.checks&&s.checks[pairKey()])||[]}
+function saveChecks(list){
+  const s=loadState();const c=s.checks||{};
+  c[pairKey()]=list;
+  const keys=Object.keys(c);
+  if(keys.length>8)keys.slice(0,keys.length-8).forEach(k=>delete c[k]);
+  saveState({checks:c});
+}
+
+/* ---- restore ---- */
+(function restore(){
+  const s=loadState();
+  if(s.fL)F.L=Object.assign(F.L,s.fL);
+  if(s.fD)F.D=Object.assign(F.D,s.fD);
+  if(!readHash()){
+    if(typeof s.iL==='number'&&s.iL<L.length)iL=s.iL;
+    if(typeof s.iD==='number'&&s.iD<D.length)iD=s.iD;
+  }
+})();
+
+/* ---- wrap the mutators so every change is written through ---- */
+const _refresh=refreshPicks;
+refreshPicks=function(){_refresh();persistPicks()};
+const _apply=applyFilter;
+applyFilter=function(t){_apply(t);saveState({fL:F.L,fD:F.D})};
+const _shop=buildShop;
+buildShop=function(){
+  _shop();
+  const out=document.getElementById('shopOut');
+  if(!out)return;
+  const done=new Set(loadChecks());
+  out.querySelectorAll('.item').forEach(row=>{
+    const nm=row.querySelector('.nm'), cb=row.querySelector('input');
+    if(!nm||!cb)return;
+    const id=nm.textContent.trim();
+    row.dataset.id=id;
+    if(done.has(id)){cb.checked=true;row.classList.add('done')}
+    cb.addEventListener('change',()=>{
+      const cur=new Set(loadChecks());
+      if(cb.checked)cur.add(id);else cur.delete(id);
+      saveChecks([...cur]);
+    });
+  });
+  const rst=document.getElementById('rst');
+  if(rst)rst.addEventListener('click',()=>saveChecks([]));
+};
+
+/* ---- buttons ---- */
+document.getElementById('copyLink').onclick=async function(){
+  if(iL===null||iD===null){this.textContent='Pick both first';setTimeout(()=>this.textContent='Copy week link',1600);return}
+  writeHash();
+  try{await navigator.clipboard.writeText(location.href);this.textContent='Copied ✓'}
+  catch(e){this.textContent=location.href}
+  setTimeout(()=>this.textContent='Copy week link',1800);
+};
+document.getElementById('resetAll').onclick=function(){
+  if(this.dataset.armed!=='1'){this.dataset.armed='1';this.textContent='Tap again to erase';
+    setTimeout(()=>{this.dataset.armed='0';this.textContent='Reset saved data'},3000);return}
+  try{localStorage.removeItem(KEY)}catch(e){}
+  location.href=location.pathname+location.search;
+};
+window.addEventListener('hashchange',()=>{if(readHash()){renderTiles();buildShop();buildCook();refreshPicks()}});
+
+renderTiles();buildShop();buildCook();refreshPicks();updateWeekLabel();
+
+/* ---- service worker ---- */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+
+</script>
