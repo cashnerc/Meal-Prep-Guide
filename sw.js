@@ -1,5 +1,5 @@
 /* Weekly Kitchen Manual — offline shell */
-const V = 'wkm-v1';
+const V = 'wkm-v12';
 const SHELL = [
   './',
   './index.html',
